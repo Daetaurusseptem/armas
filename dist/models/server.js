@@ -15,13 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
 const empleados_routes_1 = __importDefault(require("../routes/empleados.routes"));
+const empresas_routes_1 = __importDefault(require("../routes/empresas.routes"));
 const usuarios_routes_1 = __importDefault(require("../routes/usuarios.routes"));
 const empleados_1 = require("../models/empleados");
+const empresas_1 = require("./empresas");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || "3000";
-        this.dbConnect();
+        this.dbConnect().catch(err => console.log(err));
         this.listen();
         this.middlewares();
         this.routes();
@@ -31,7 +33,8 @@ class Server {
     }
     routes() {
         this.app.use('/api/empleados', empleados_routes_1.default);
-        this.app.use('/api/users', usuarios_routes_1.default);
+        this.app.use('/api/usuarios', usuarios_routes_1.default);
+        this.app.use('/api/empresas', empresas_routes_1.default);
     }
     middlewares() {
         this.app.use(express_1.default.json());
@@ -39,7 +42,14 @@ class Server {
     dbConnect() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                empleados_1.empleados.sync({ alter: true });
+                empresas_1.empresas.hasOne(empleados_1.empleados, {
+                    foreignKey: {
+                        name: 'empresaId',
+                        allowNull: false
+                    }
+                });
+                empresas_1.empresas.sync({ force: false });
+                empleados_1.empleados.sync({ force: false });
                 console.log('Connection has been established successfully.');
             }
             catch (error) {

@@ -12,5 +12,5 @@ export const login = (req:Request, resp:Response) =>{
         ok:true,
         msg:"Inicio sesion",
         body:req.body
-    })
+    }) 
 }

@@ -9,33 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createEmpleado = exports.getEmpleados = void 0;
-const empleados_1 = require("../models/empleados");
-const getEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const listaEmpleados = yield empleados_1.empleados.findAll();
-    return resp.json({
-        ok: true,
-        empleados: listaEmpleados
-    });
-});
-exports.getEmpleados = getEmpleados;
-const createEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const nuevoEmpleado = req.body;
+exports.createEmpresa = void 0;
+const empresas_1 = require("../models/empresas");
+const createEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const nuevoEmpresa = req.body;
     try {
-        //Se busca si el empleado existe
-        const empleado = yield empleados_1.empleados.findByPk(nuevoEmpleado.id);
-        if (empleado) {
+        //Se busca si el Empresa existe
+        const Empresa = yield empresas_1.empresas.findByPk(nuevoEmpresa.id);
+        if (Empresa) {
             return resp.status(400).json({
                 ok: false,
-                msg: 'empleado ya existe'
+                msg: 'ID Empresa ya existe'
             });
         }
-        //Si no existe se crea el empleado
-        const crearEmpleado = yield empleados_1.empleados.create(req.body);
-        crearEmpleado.save();
+        //Si no existe se crea el Empresa
+        const crearEmpresa = yield empresas_1.empresas.create(req.body);
+        crearEmpresa.save();
         return resp.status(200).json({
             ok: false,
-            msg: 'empleado creado exitosamente'
+            msg: 'Empresa creada exitosamente'
         });
     }
     catch (error) {
@@ -45,4 +37,4 @@ const createEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function
         });
     }
 });
-exports.createEmpleado = createEmpleado;
+exports.createEmpresa = createEmpresa;

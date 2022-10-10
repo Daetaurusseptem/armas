@@ -10,33 +10,41 @@ export const empleados = sequelize.define('Empleados', {
         primaryKey: true,
         unique: true
     },
+    img:{
+        type:DataTypes.STRING(100)
+    },
     nombre: {
-        type: DataTypes.CHAR(30)
+        type: DataTypes.CHAR(30),
+        allowNull:false
     },
 
     apellido_paterno: {
-        type: DataTypes.CHAR(30)
+        type: DataTypes.CHAR(30),
+        allowNull:false
     },
     apellido_materno: {
         type: DataTypes.CHAR(30)
     },
     fecha_ingreso: {
-        type: DataTypes.DATE()
+        type: DataTypes.DATE(),
+        allowNull:false
     },
     sexo: {
-        type: DataTypes.CHAR(1)
-    },
-    empresa: {
-        type: DataTypes.CHAR(30),
+        type: DataTypes.CHAR(1),
+        allowNull:false
     },
     area_trabajo: {
-        type: DataTypes.CHAR(8)
+        type: DataTypes.CHAR(8),
+        allowNull:false
     },
     status: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        allowNull:false
+        
     },
     actualizo: {
-        type: DataTypes.CHAR(8)
+        type: DataTypes.CHAR(8),
+        allowNull:false
     } 
 }, 
 {

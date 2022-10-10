@@ -12,39 +12,32 @@ exports.empleados = db_1.default.define('Empleados', {
         primaryKey: true,
         unique: true
     },
-    img: {
-        type: sequelize_1.DataTypes.STRING(100)
-    },
     nombre: {
-        type: sequelize_1.DataTypes.CHAR(30),
-        allowNull: false
+        type: sequelize_1.DataTypes.CHAR(30)
     },
     apellido_paterno: {
-        type: sequelize_1.DataTypes.CHAR(30),
-        allowNull: false
+        type: sequelize_1.DataTypes.CHAR(30)
     },
     apellido_materno: {
         type: sequelize_1.DataTypes.CHAR(30)
     },
     fecha_ingreso: {
-        type: sequelize_1.DataTypes.DATE(),
-        allowNull: false
+        type: sequelize_1.DataTypes.DATE()
     },
     sexo: {
-        type: sequelize_1.DataTypes.CHAR(1),
-        allowNull: false
+        type: sequelize_1.DataTypes.CHAR(1)
+    },
+    empresa: {
+        type: sequelize_1.DataTypes.CHAR(30),
     },
     area_trabajo: {
-        type: sequelize_1.DataTypes.CHAR(8),
-        allowNull: false
+        type: sequelize_1.DataTypes.CHAR(8)
     },
     status: {
-        type: sequelize_1.DataTypes.BOOLEAN,
-        allowNull: false
+        type: sequelize_1.DataTypes.BOOLEAN
     },
     actualizo: {
-        type: sequelize_1.DataTypes.CHAR(8),
-        allowNull: false
+        type: sequelize_1.DataTypes.CHAR(8)
     }
 }, {
     createdAt: 'creadoEl',
