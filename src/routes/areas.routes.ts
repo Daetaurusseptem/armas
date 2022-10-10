@@ -1,12 +1,12 @@
 import {Router} from 'express';
+import { createArea, getAreas } from '../controllers/areas';
 
 import {getEmpleados, createEmpleado, darDeBajaAlta} from '../controllers/empleados';
 
 const router =  Router();
 
-router.get( '/', getEmpleados )
-router.post( '/', createEmpleado )
-router.put('/cambiar-status/:idEmpleado', darDeBajaAlta)
+router.get( '/', getAreas )
+router.post( '/', createArea )
 
-
+ 
 export default router 

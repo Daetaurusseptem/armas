@@ -4,20 +4,25 @@ import {
 } from 'sequelize';
 
 
-export const empresas = sequelize.define('Empresas', {
+export const usuarios = sequelize.define('Usuarios', {
     id: {
         type: DataTypes.STRING(8),
-        primaryKey: true,
-        unique: true,
-        allowNull:false
+        primaryKey: true
+    },
+    img:{
+        type:DataTypes.STRING(100)
     },
     nombre: {
         type: DataTypes.STRING(30),
         allowNull:false
-    }, 
-    descripcion:{
-        type:DataTypes.STRING(30),
+    },
+    password:{
+        type:DataTypes.STRING(64)
+    },
+    status: {
+        type: DataTypes.BOOLEAN,
         allowNull:false
+        
     },
     actualizo: {
         type: DataTypes.STRING(8),
@@ -29,14 +34,3 @@ export const empresas = sequelize.define('Empresas', {
     updatedAt: 'actualizadoEl'
 }
 )
-
-
-
-
-
-
-
-
-
-
-

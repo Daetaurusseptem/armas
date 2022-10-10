@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const areas_1 = require("../models/areas");
+const empleados_1 = require("../models/empleados");
+const empresas_1 = require("../models/empresas");
+const permisos_1 = require("../models/permisos");
+const usuarios_1 = require("../models/usuarios");
+empresas_1.empresas.sync({ force: false });
+empleados_1.empleados.sync({ force: false });
+areas_1.areas.sync({ force: false });
+permisos_1.permisos.sync({ force: true });
+usuarios_1.usuarios.sync({ force: true });

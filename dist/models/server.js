@@ -17,8 +17,12 @@ const express_1 = __importDefault(require("express"));
 const empleados_routes_1 = __importDefault(require("../routes/empleados.routes"));
 const empresas_routes_1 = __importDefault(require("../routes/empresas.routes"));
 const usuarios_routes_1 = __importDefault(require("../routes/usuarios.routes"));
+const areas_routes_1 = __importDefault(require("../routes/areas.routes"));
 const empleados_1 = require("../models/empleados");
+const usuarios_1 = require("../models/usuarios");
 const empresas_1 = require("./empresas");
+const areas_1 = require("../models/areas");
+const permisos_1 = require("../models/permisos");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -35,6 +39,7 @@ class Server {
         this.app.use('/api/empleados', empleados_routes_1.default);
         this.app.use('/api/usuarios', usuarios_routes_1.default);
         this.app.use('/api/empresas', empresas_routes_1.default);
+        this.app.use('/api/areas', areas_routes_1.default);
     }
     middlewares() {
         this.app.use(express_1.default.json());
@@ -42,14 +47,24 @@ class Server {
     dbConnect() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                empresas_1.empresas.hasOne(empleados_1.empleados, {
-                    foreignKey: {
-                        name: 'empresaId',
-                        allowNull: false
-                    }
-                });
                 empresas_1.empresas.sync({ force: false });
                 empleados_1.empleados.sync({ force: false });
+                areas_1.areas.sync({ force: false });
+                usuarios_1.usuarios.sync({ force: true });
+                empleados_1.empleados.belongsTo(empresas_1.empresas, {
+                    constraints: true,
+                    foreignKey: {
+                        name: 'empresaId',
+                        allowNull: false,
+                    }
+                });
+                areas_1.areas.belongsToMany(usuarios_1.usuarios, { through: permisos_1.permisos, constraints: true, foreignKey: { name: 'usuarioId', allowNull: false } });
+                usuarios_1.usuarios.belongsToMany(areas_1.areas, { through: permisos_1.permisos, constraints: true, foreignKey: { name: 'areaId', allowNull: false } });
+                empresas_1.empresas.sync({ force: false });
+                empleados_1.empleados.sync({ force: false });
+                areas_1.areas.sync({ force: false });
+                permisos_1.permisos.sync({ force: true });
+                usuarios_1.usuarios.sync({ force: true });
                 console.log('Connection has been established successfully.');
             }
             catch (error) {

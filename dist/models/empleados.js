@@ -8,23 +8,22 @@ const db_1 = __importDefault(require("../db/db"));
 const sequelize_1 = require("sequelize");
 exports.empleados = db_1.default.define('Empleados', {
     id: {
-        type: sequelize_1.DataTypes.CHAR(8),
-        primaryKey: true,
-        unique: true
+        type: sequelize_1.DataTypes.STRING(8),
+        primaryKey: true
     },
     img: {
         type: sequelize_1.DataTypes.STRING(100)
     },
     nombre: {
-        type: sequelize_1.DataTypes.CHAR(30),
+        type: sequelize_1.DataTypes.STRING(30),
         allowNull: false
     },
     apellido_paterno: {
-        type: sequelize_1.DataTypes.CHAR(30),
+        type: sequelize_1.DataTypes.STRING(30),
         allowNull: false
     },
     apellido_materno: {
-        type: sequelize_1.DataTypes.CHAR(30)
+        type: sequelize_1.DataTypes.STRING(30)
     },
     fecha_ingreso: {
         type: sequelize_1.DataTypes.DATE(),
@@ -34,8 +33,12 @@ exports.empleados = db_1.default.define('Empleados', {
         type: sequelize_1.DataTypes.CHAR(1),
         allowNull: false
     },
+    empresa: {
+        type: sequelize_1.DataTypes.STRING(8),
+        allowNull: false
+    },
     area_trabajo: {
-        type: sequelize_1.DataTypes.CHAR(8),
+        type: sequelize_1.DataTypes.STRING(8),
         allowNull: false
     },
     status: {
@@ -43,7 +46,7 @@ exports.empleados = db_1.default.define('Empleados', {
         allowNull: false
     },
     actualizo: {
-        type: sequelize_1.DataTypes.CHAR(8),
+        type: sequelize_1.DataTypes.STRING(8),
         allowNull: false
     }
 }, {

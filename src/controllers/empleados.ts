@@ -1,8 +1,11 @@
 import {Request, response, Response} from 'express';
+import { Empleado } from '../interfaces/pures/empleado.interface';
 import { empleados } from '../models/empleados';
+import { empresas } from '../models/empresas';
 
 export const getEmpleados = async(req:Request, resp:Response) =>{
-    const listaEmpleados = await empleados.findAll();
+    const listaEmpleados = await empleados.findAll({include:empresas});
+    
     return resp.json({
         ok:true,
         empleados:listaEmpleados
@@ -42,3 +45,38 @@ export const createEmpleado =async (req:Request, resp:Response) =>{
     
 
 }
+
+export const darDeBajaAlta =async(req:Request, resp:Response) =>{
+    try {
+        const {idEmpleado} = req.params;
+        console.log(idEmpleado);
+    
+        const empleadoDB = await empleados.findByPk(idEmpleado)
+        
+        const nombreUsuario = await empleadoDB?.getDataValue('nombre');
+
+        console.log(nombreUsuario);
+    
+        if(!empleadoDB){
+            return resp.status(404).json({
+                ok:false,
+                msg:'error: El usuario no existe'
+            })
+        }
+        if(empleadoDB.getDataValue("status")){
+
+            empleadoDB.update({"status":0})
+        }else{
+            empleadoDB.update({"status":1})
+
+        }
+    } catch (error) {
+        
+    }
+    
+  
+
+
+}
+
+    

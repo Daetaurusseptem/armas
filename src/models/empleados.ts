@@ -6,24 +6,23 @@ import {
 
 export const empleados = sequelize.define('Empleados', {
     id: {
-        type: DataTypes.CHAR(8),
-        primaryKey: true,
-        unique: true
+        type: DataTypes.STRING(8),
+        primaryKey: true
     },
     img:{
         type:DataTypes.STRING(100)
     },
     nombre: {
-        type: DataTypes.CHAR(30),
+        type: DataTypes.STRING(30),
         allowNull:false
-    },
+    }, 
 
     apellido_paterno: {
-        type: DataTypes.CHAR(30),
+        type: DataTypes.STRING(30), 
         allowNull:false
     },
     apellido_materno: {
-        type: DataTypes.CHAR(30)
+        type: DataTypes.STRING(30) 
     },
     fecha_ingreso: {
         type: DataTypes.DATE(),
@@ -33,8 +32,12 @@ export const empleados = sequelize.define('Empleados', {
         type: DataTypes.CHAR(1),
         allowNull:false
     },
+    empresa:{
+        type:DataTypes.STRING(8),
+        allowNull:false
+    },
     area_trabajo: {
-        type: DataTypes.CHAR(8),
+        type: DataTypes.STRING(8),
         allowNull:false
     },
     status: {
@@ -43,7 +46,7 @@ export const empleados = sequelize.define('Empleados', {
         
     },
     actualizo: {
-        type: DataTypes.CHAR(8),
+        type: DataTypes.STRING(8),
         allowNull:false
     } 
 }, 

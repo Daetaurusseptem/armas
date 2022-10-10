@@ -4,7 +4,7 @@ import {
 } from 'sequelize';
 
 
-export const empresas = sequelize.define('Empresas', {
+export const areas = sequelize.define('Areas', {
     id: {
         type: DataTypes.STRING(8),
         primaryKey: true,
@@ -22,7 +22,7 @@ export const empresas = sequelize.define('Empresas', {
     actualizo: {
         type: DataTypes.STRING(8),
         allowNull:false
-    } 
+    }
 }, 
 {
     createdAt: 'creadoEl',  
