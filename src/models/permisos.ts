@@ -4,7 +4,11 @@ import {
 } from 'sequelize';
 
 
-export const permisos = sequelize.define('Permisos',{})
+export const permisos = sequelize.define('Permisos',{
+    tipo:{
+        type:DataTypes.STRING(1)
+    }
+})
 
 
 

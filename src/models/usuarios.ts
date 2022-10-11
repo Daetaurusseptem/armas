@@ -12,6 +12,12 @@ export const usuarios = sequelize.define('Usuarios', {
     img:{
         type:DataTypes.STRING(100)
     },
+    usuario: {
+        type: DataTypes.STRING(11),
+        allowNull:false,
+        unique:true,
+        validate:{min:5},
+    },
     nombre: {
         type: DataTypes.STRING(30),
         allowNull:false

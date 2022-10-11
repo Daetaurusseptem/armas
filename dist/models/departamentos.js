@@ -3,18 +3,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.expedientes = void 0;
+exports.empresas = void 0;
 const db_1 = __importDefault(require("../db/db"));
 const sequelize_1 = require("sequelize");
-exports.expedientes = db_1.default.define('Expedientes', {
-    nota: {
-        type: sequelize_1.DataTypes.STRING(50),
+exports.empresas = db_1.default.define('Departamentos', {
+    id: {
+        type: sequelize_1.DataTypes.STRING(8),
+        primaryKey: true,
+        unique: true,
         allowNull: false
     },
-    actualizo: {
-        type: sequelize_1.DataTypes.STRING(8),
-        allowNull: false,
-    }
+    nombre: {
+        type: sequelize_1.DataTypes.STRING(30),
+        allowNull: false
+    },
+    descripcion: {
+        type: sequelize_1.DataTypes.STRING(30),
+        allowNull: false
+    },
 }, {
     createdAt: 'creadoEl',
     updatedAt: 'actualizadoEl'

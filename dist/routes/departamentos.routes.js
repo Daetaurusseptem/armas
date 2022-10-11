@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const empresas_1 = require("../controllers/empresas");
+const departamentos_1 = require("../controllers/departamentos");
 const router = (0, express_1.Router)();
-router.get('/', empresas_1.getEmpresas);
-router.post('/', empresas_1.createEmpresa);
+router.get('/', departamentos_1.getDepartamentos);
+router.post('/', departamentos_1.createDepartamentos);
 exports.default = router;

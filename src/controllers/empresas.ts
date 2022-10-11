@@ -1,6 +1,15 @@
 import { Request, Response } from "express";
 import { empresas } from "../models/empresas";
 
+export const getEmpresas = async(req:Request, resp:Response) =>{
+    const listaEmpresas = await empresas.findAll();
+    
+    return resp.json({
+        ok:true,
+        empleados:listaEmpresas
+    })
+}
+
 export const createEmpresa = async(req:Request, resp:Response)=>{
     
     const nuevoEmpresa= req.body

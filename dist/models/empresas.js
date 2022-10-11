@@ -8,7 +8,7 @@ const db_1 = __importDefault(require("../db/db"));
 const sequelize_1 = require("sequelize");
 exports.empresas = db_1.default.define('Empresas', {
     id: {
-        type: sequelize_1.DataTypes.STRING(8),
+        type: sequelize_1.DataTypes.STRING(20),
         primaryKey: true,
         unique: true,
         allowNull: false

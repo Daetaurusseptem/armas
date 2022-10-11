@@ -14,6 +14,12 @@ exports.usuarios = db_1.default.define('Usuarios', {
     img: {
         type: sequelize_1.DataTypes.STRING(100)
     },
+    usuario: {
+        type: sequelize_1.DataTypes.STRING(11),
+        allowNull: false,
+        unique: true,
+        validate: { min: 5 },
+    },
     nombre: {
         type: sequelize_1.DataTypes.STRING(30),
         allowNull: false

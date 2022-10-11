@@ -9,33 +9,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createEmpresa = exports.getEmpresas = void 0;
-const empresas_1 = require("../models/empresas");
-const getEmpresas = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const listaEmpresas = yield empresas_1.empresas.findAll();
+exports.createArea = exports.getAreas = void 0;
+const areas_1 = require("../models/areas");
+const getAreas = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const listaAreas = yield areas_1.areas.findAll();
     return resp.json({
         ok: true,
-        empleados: listaEmpresas
+        empleados: listaAreas
     });
 });
-exports.getEmpresas = getEmpresas;
-const createEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const nuevoEmpresa = req.body;
+exports.getAreas = getAreas;
+const createArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const nuevoArea = req.body;
     try {
-        //Se busca si el Empresa existe
-        const Empresa = yield empresas_1.empresas.findByPk(nuevoEmpresa.id);
-        if (Empresa) {
+        //Se busca si el empleado existe
+        const area = yield areas_1.areas.findByPk(nuevoArea.id);
+        if (area) {
             return resp.status(400).json({
                 ok: false,
-                msg: 'ID Empresa ya existe'
+                msg: 'id area ya existe'
             });
         }
-        //Si no existe se crea el Empresa
-        const crearEmpresa = yield empresas_1.empresas.create(req.body);
-        crearEmpresa.save();
+        //Si no existe se crea el empleado
+        const crearArea = yield areas_1.areas.create(req.body);
+        crearArea.save();
         return resp.status(200).json({
             ok: false,
-            msg: 'Empresa creada exitosamente'
+            msg: 'area creada exitosamente'
         });
     }
     catch (error) {
@@ -45,4 +45,4 @@ const createEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function*
         });
     }
 });
-exports.createEmpresa = createEmpresa;
+exports.createArea = createArea;

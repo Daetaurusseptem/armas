@@ -16,7 +16,6 @@ export const empleados = sequelize.define('Empleados', {
         type: DataTypes.STRING(30),
         allowNull:false
     }, 
-
     apellido_paterno: {
         type: DataTypes.STRING(30), 
         allowNull:false
@@ -30,15 +29,7 @@ export const empleados = sequelize.define('Empleados', {
     },
     sexo: {
         type: DataTypes.CHAR(1),
-        allowNull:false
-    },
-    empresa:{
-        type:DataTypes.STRING(8),
-        allowNull:false
-    },
-    area_trabajo: {
-        type: DataTypes.STRING(8),
-        allowNull:false
+        allowNull:false 
     },
     status: {
         type: DataTypes.BOOLEAN,
@@ -46,6 +37,10 @@ export const empleados = sequelize.define('Empleados', {
         
     },
     actualizo: {
+        type: DataTypes.STRING(8),
+        allowNull:false
+    },
+    jefe_inmediato:{
         type: DataTypes.STRING(8),
         allowNull:false
     } 

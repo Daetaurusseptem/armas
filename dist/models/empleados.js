@@ -33,19 +33,15 @@ exports.empleados = db_1.default.define('Empleados', {
         type: sequelize_1.DataTypes.CHAR(1),
         allowNull: false
     },
-    empresa: {
-        type: sequelize_1.DataTypes.STRING(8),
-        allowNull: false
-    },
-    area_trabajo: {
-        type: sequelize_1.DataTypes.STRING(8),
-        allowNull: false
-    },
     status: {
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: false
     },
     actualizo: {
+        type: sequelize_1.DataTypes.STRING(8),
+        allowNull: false
+    },
+    jefe_inmediato: {
         type: sequelize_1.DataTypes.STRING(8),
         allowNull: false
     }
