@@ -5,31 +5,32 @@ import routesEmpresas from '../routes/empresas.routes';
 import routesUsers from '../routes/usuarios.routes';
 import routesAreas from '../routes/areas.routes';
 import routesDepartamentos from '../routes/departamentos.routes';
+import shortId from 'shortid';
 
 export class Server{
-    private app : Application
-    port:string
+    private app : Application;
+    port:string;
     constructor(){
-        this.app = express()
-        this.port= process.env.PORT || "3000"
-        this.dbConnect().catch(err=>console.log(err) ) 
-        this.listen()
-        this.middlewares()
-        this.routes()
+        this.app = express();
+        this.port= process.env.PORT || "3000";
+        this.dbConnect().catch(err=>console.log(err) ) ;
+        this.listen();
+        this.middlewares();
+        this.routes();
     }
 
     listen(){
         this.app.listen(process.env.PORT, ()=>{console.log(`Listening in port ${this.port}`);})
     }
     routes(){
-        this.app.use('/api/empleados', routesEmpleados)
-        this.app.use('/api/usuarios', routesUsers)
-        this.app.use('/api/empresas', routesEmpresas )
-        this.app.use('/api/areas', routesAreas )
-        this.app.use('/api/departamentos', routesDepartamentos )
+        this.app.use('/api/empleados', routesEmpleados);
+        this.app.use('/api/usuarios', routesUsers);
+        this.app.use('/api/empresas', routesEmpresas );
+        this.app.use('/api/areas', routesAreas );
+        this.app.use('/api/departamentos', routesDepartamentos );
     }
     middlewares(){
-        this.app.use(express.json())
+        this.app.use(express.json());
     }
     async dbConnect(){
         try { 

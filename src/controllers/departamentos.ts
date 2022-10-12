@@ -1,7 +1,5 @@
-import {Request, response, Response} from 'express';
-import { Empleado } from '../interfaces/pures/empleado.interface';
-import { areas } from '../models/areas';
-import { departamentos } from '../models/departamento';
+import {Request, Response} from 'express';
+import { departamentos } from '../models/departamentos';
 
 
 export const getDepartamentos = async(req:Request, resp:Response) =>{
@@ -18,7 +16,7 @@ export const createDepartamentos =async (req:Request, resp:Response) =>{
 
     try {
         //Se busca si el empleado existe
-        const area = await areas.findByPk(nuevoDepartamento.id)
+        const area = await departamentos.findByPk(nuevoDepartamento.id)
         if(area){
             return resp.status(400).json({
                 ok:false,
@@ -26,9 +24,9 @@ export const createDepartamentos =async (req:Request, resp:Response) =>{
             })
         }
         //Si no existe se crea el empleado
-        const crearDepartamento = await areas.create(req.body)
+        const crearDepartamento = await departamentos.create(req.body)
         crearDepartamento.save();
-
+ 
         return resp.status(200).json({
             ok:false,
             msg:'area creada exitosamente'
@@ -46,4 +44,20 @@ export const createDepartamentos =async (req:Request, resp:Response) =>{
     
 
 }
+export const updateDepartamento= async (req:Request, resp:Response) => {
+    const {departamentoId}= req.params;
+
+    const empresaExiste = await departamentos.findByPk(departamentoId);
+
+    if(!empresaExiste){
+        return resp.status(400).json({
+            ok:false,
+            msg:'Este empleado no existe'
+        })
+    }
+
+    const updateDepartamento = await departamentos.update({where:{id:departamentoId}},req.body)
+    
+}
+
 

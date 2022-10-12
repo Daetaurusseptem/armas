@@ -6,8 +6,11 @@ import {
 
 export const empleados = sequelize.define('Empleados', {
     id: {
-        type: DataTypes.STRING(8),
-        primaryKey: true
+        type: DataTypes.STRING(9),
+        primaryKey:true
+    },
+    numero_empleado: {
+        type: DataTypes.STRING(8)
     },
     img:{
         type:DataTypes.STRING(100)

@@ -2,10 +2,10 @@ import { areas } from "../models/areas"
 import { empleados } from "../models/empleados"
 import { empresas } from "../models/empresas"
 import { expedientes } from "../models/expedientes"
-import { departamentos } from "../models/departamento"
+import { departamentos } from "../models/departamentos"
 import { permisos } from "../models/permisos"
 import { tipo_expedientes } from "../models/tipo_expediente"
-import { usuarios } from "../models/usuarios"
+import { usuarios } from "../models/usuarios" 
 
 
 //Campo empresaId en tabla empleados

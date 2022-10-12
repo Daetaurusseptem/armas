@@ -9,30 +9,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateArea = exports.createArea = exports.getAreas = void 0;
+exports.updateConfig = exports.createConfig = exports.getConfigs = void 0;
 const areas_1 = require("../models/areas");
-const getAreas = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const listaAreas = yield areas_1.areas.findAll();
+const configuraciones_1 = require("../models/configuraciones");
+const getConfigs = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const listaConfiguraciones = yield configuraciones_1.configuraciones.findAll();
     return resp.json({
         ok: true,
-        empleados: listaAreas
+        empleados: listaConfiguraciones
     });
 });
-exports.getAreas = getAreas;
-const createArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const nuevoArea = req.body;
+exports.getConfigs = getConfigs;
+const createConfig = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const nuevaConfig = req.body;
     try {
-        //Se busca si el empleado existe
-        const area = yield areas_1.areas.findByPk(nuevoArea.id);
-        if (area) {
+        //Se busca si el id de la configuracion existe
+        const config = yield configuraciones_1.configuraciones.findByPk(nuevaConfig.id);
+        if (config) {
             return resp.status(400).json({
                 ok: false,
-                msg: 'id area ya existe'
+                msg: 'id config ya existe'
             });
         }
-        //Si no existe se crea el empleado
-        const crearArea = yield areas_1.areas.create(req.body);
-        crearArea.save();
+        //Si no existe se crea la configuacion
+        const crearConfig = yield configuraciones_1.configuraciones.create(req.body);
+        crearConfig.save();
         return resp.status(200).json({
             ok: false,
             msg: 'area creada exitosamente'
@@ -45,16 +46,16 @@ const createArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 });
-exports.createArea = createArea;
-const updateArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { areaId } = req.body;
-    const areaExiste = yield areas_1.areas.findByPk(areaId);
-    if (!areaExiste) {
+exports.createConfig = createConfig;
+const updateConfig = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { configId } = req.params;
+    const configExiste = yield areas_1.areas.findByPk(configId);
+    if (!configExiste) {
         return resp.status(400).json({
             ok: false,
-            msg: 'Esta area no existe'
+            msg: 'El id de la configuracion no existe'
         });
     }
-    const updateArea = yield areas_1.areas.update({ where: { areaId: areaId } }, req.body);
+    const updateConfig = yield areas_1.areas.update({ where: { id: configId } }, req.body);
 });
-exports.updateArea = updateArea;
+exports.updateConfig = updateConfig;

@@ -47,3 +47,18 @@ export const createArea =async (req:Request, resp:Response) =>{
 
 }
 
+export const updateArea= async (req:Request, resp:Response) => {
+    const {areaId }= req.body;
+
+    const areaExiste = await areas.findByPk(areaId);
+
+    if(!areaExiste){
+        return resp.status(400).json({
+            ok:false,
+            msg:'Esta area no existe'
+        })
+    }
+
+    const updateArea = await areas.update({where:{areaId:areaId}},req.body)
+}
+

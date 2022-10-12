@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createEmpresa = exports.getEmpresas = void 0;
+exports.updateEmpresa = exports.createEmpresa = exports.getEmpresas = void 0;
 const empresas_1 = require("../models/empresas");
 const getEmpresas = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const listaEmpresas = yield empresas_1.empresas.findAll();
@@ -46,3 +46,15 @@ const createEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.createEmpresa = createEmpresa;
+const updateEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { empresaId } = req.params;
+    const empresaExiste = yield empresas_1.empresas.findByPk(empresaId);
+    if (!empresaExiste) {
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Este empleado no existe'
+        });
+    }
+    const updateEmpresa = yield empresas_1.empresas.update({ where: { id: empresaId } }, req.body);
+});
+exports.updateEmpresa = updateEmpresa;

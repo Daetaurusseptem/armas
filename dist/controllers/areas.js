@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createArea = exports.getAreas = void 0;
+exports.updateArea = exports.createArea = exports.getAreas = void 0;
 const areas_1 = require("../models/areas");
 const getAreas = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const listaAreas = yield areas_1.areas.findAll();
@@ -46,3 +46,15 @@ const createArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.createArea = createArea;
+const updateArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { areaId } = req.body;
+    const areaExiste = yield areas_1.areas.findByPk(areaId);
+    if (!areaExiste) {
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Esta area no existe'
+        });
+    }
+    const updateArea = yield areas_1.areas.update({ where: { areaId: areaId } }, req.body);
+});
+exports.updateArea = updateArea;

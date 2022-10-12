@@ -40,3 +40,18 @@ export const createEmpresa = async(req:Request, resp:Response)=>{
         })
     }
 }
+
+export const updateEmpresa= async (req:Request, resp:Response) => {
+    const {empresaId}= req.params;
+
+    const empresaExiste = await empresas.findByPk(empresaId);
+
+    if(!empresaExiste){
+        return resp.status(400).json({
+            ok:false,
+            msg:'Este empleado no existe'
+        })
+    }
+
+    const updateEmpresa = await empresas.update({where:{id:empresaId}},req.body)
+}

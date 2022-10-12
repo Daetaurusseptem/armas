@@ -9,11 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDepartamentos = exports.getDepartamentos = void 0;
-const areas_1 = require("../models/areas");
-const departamento_1 = require("../models/departamento");
+exports.updateDepartamento = exports.createDepartamentos = exports.getDepartamentos = void 0;
+const departamentos_1 = require("../models/departamentos");
 const getDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const listaDepartamentos = yield departamento_1.departamentos.findAll();
+    const listaDepartamentos = yield departamentos_1.departamentos.findAll();
     return resp.json({
         ok: true,
         empleados: listaDepartamentos
@@ -24,7 +23,7 @@ const createDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, fun
     const nuevoDepartamento = req.body;
     try {
         //Se busca si el empleado existe
-        const area = yield areas_1.areas.findByPk(nuevoDepartamento.id);
+        const area = yield departamentos_1.departamentos.findByPk(nuevoDepartamento.id);
         if (area) {
             return resp.status(400).json({
                 ok: false,
@@ -32,7 +31,7 @@ const createDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, fun
             });
         }
         //Si no existe se crea el empleado
-        const crearDepartamento = yield areas_1.areas.create(req.body);
+        const crearDepartamento = yield departamentos_1.departamentos.create(req.body);
         crearDepartamento.save();
         return resp.status(200).json({
             ok: false,
@@ -47,3 +46,15 @@ const createDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.createDepartamentos = createDepartamentos;
+const updateDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { departamentoId } = req.params;
+    const empresaExiste = yield departamentos_1.departamentos.findByPk(departamentoId);
+    if (!empresaExiste) {
+        return resp.status(400).json({
+            ok: false,
+            msg: 'Este empleado no existe'
+        });
+    }
+    const updateDepartamento = yield departamentos_1.departamentos.update({ where: { id: departamentoId } }, req.body);
+});
+exports.updateDepartamento = updateDepartamento;

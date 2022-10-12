@@ -1,12 +1,13 @@
 import { Request, Response } from "express"
-import { and } from "sequelize";
 import { areas } from "../models/areas";
 import { permisos } from "../models/permisos";
 import { usuarios } from "../models/usuarios";
 
 
 export const agregarPermiso =async(req:Request, resp:Response)=>{
-    const {idUsuario, idArea} =req.body;
+    
+    const {idUsuario, idArea} =req.params;
+    const {tipo} =req.body;
 
     const areaDB = await areas.findByPk(idArea);
     
@@ -32,7 +33,7 @@ export const agregarPermiso =async(req:Request, resp:Response)=>{
         permisosDB.destroy()
         permisosDB.save()
     }else{
-        const crearPrivilegios =  await permisos.create({usuarioId:idUsuario, areaId:idArea})
+        const crearPrivilegios =  await permisos.create({usuarioId:idUsuario, areaId:idArea, tipo})
         await crearPrivilegios.save();
     }
     
