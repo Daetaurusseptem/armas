@@ -1,0 +1,23 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#bd40ca",
+        "activityBar.background": "#bd40ca",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#4b4615",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#bd40ca",
+        "statusBar.background": "#9d2fa8",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#bd40ca",
+        "statusBarItem.remoteBackground": "#9d2fa8",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#9d2fa8",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#9d2fa899",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#9D2FA8",
+    "window.title": "Backendo 🐱‍👓🐱‍👓"
+}
