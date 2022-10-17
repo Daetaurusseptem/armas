@@ -18,7 +18,9 @@ const empleados_routes_1 = __importDefault(require("../routes/empleados.routes")
 const empresas_routes_1 = __importDefault(require("../routes/empresas.routes"));
 const usuarios_routes_1 = __importDefault(require("../routes/usuarios.routes"));
 const areas_routes_1 = __importDefault(require("../routes/areas.routes"));
+const permisos_routes_1 = __importDefault(require("../routes/permisos.routes"));
 const departamentos_routes_1 = __importDefault(require("../routes/departamentos.routes"));
+const cors = require('cors');
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -37,9 +39,11 @@ class Server {
         this.app.use('/api/empresas', empresas_routes_1.default);
         this.app.use('/api/areas', areas_routes_1.default);
         this.app.use('/api/departamentos', departamentos_routes_1.default);
+        this.app.use('/api/permisos', permisos_routes_1.default);
     }
     middlewares() {
         this.app.use(express_1.default.json());
+        this.app.use(cors());
     }
     dbConnect() {
         return __awaiter(this, void 0, void 0, function* () {

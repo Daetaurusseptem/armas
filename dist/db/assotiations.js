@@ -18,6 +18,6 @@ expedientes_1.expedientes.belongsTo(areas_1.areas, { constraints: true, foreignK
 expedientes_1.expedientes.belongsTo(empresas_1.empresas, { constraints: true, foreignKey: { name: 'empresaId', allowNull: false } });
 expedientes_1.expedientes.belongsTo(tipo_expediente_1.tipo_expedientes, { constraints: true, foreignKey: { name: 'tipo_expediente', allowNull: false } });
 departamentos_1.departamentos.belongsTo(empresas_1.empresas, { constraints: true, foreignKey: { name: 'empresaId', allowNull: false } });
-areas_1.areas.belongsToMany(usuarios_1.usuarios, { through: permisos_1.permisos, constraints: true, foreignKey: { name: 'usuarioId', allowNull: false } });
-usuarios_1.usuarios.belongsToMany(areas_1.areas, { through: permisos_1.permisos, constraints: true, foreignKey: { name: 'areaId', allowNull: false } });
+areas_1.areas.belongsToMany(usuarios_1.usuarios, { through: permisos_1.permisos, constraints: true, foreignKey: { name: 'areaId', allowNull: false } });
+usuarios_1.usuarios.belongsToMany(areas_1.areas, { through: permisos_1.permisos, constraints: true, foreignKey: { name: 'usuarioId', allowNull: false } });
 require('../db/modelsSync');

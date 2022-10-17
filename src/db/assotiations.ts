@@ -24,13 +24,13 @@ expedientes.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId',
 expedientes.belongsTo(tipo_expedientes, {constraints:true, foreignKey:{name:'tipo_expediente', allowNull:false}})
 
 departamentos.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId',allowNull:false}})
-areas.belongsToMany(usuarios,   {through:permisos, constraints:true, foreignKey:{name:'usuarioId', allowNull:false}})
-usuarios.belongsToMany(areas,  {through:permisos, constraints:true, foreignKey:{name:'areaId', allowNull:false}}) 
+areas.belongsToMany(usuarios,   {through:permisos, constraints:true, foreignKey:{name:'areaId', allowNull:false}})
+usuarios.belongsToMany(areas,  {through:permisos, constraints:true, foreignKey:{name:'usuarioId', allowNull:false}}) 
 
 
-   
+     
 
-require('../db/modelsSync');  
+require('../db/modelsSync');   
 
 
 

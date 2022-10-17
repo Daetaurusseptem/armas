@@ -1,10 +1,32 @@
 import {Request, response, Response} from 'express';
 import { usuarios } from '../models/usuarios';
 
+import shortId from'shortid'
+import { permisos } from '../models/permisos';
+export const getUsers = async(req:Request, resp:Response) =>{
+    try {
+        const listaUsuarios = await usuarios.findAll({include:{association:permisos}});
+        
+        return resp.json({
+            ok:true,
+            usuarios:listaUsuarios
+        })
+        
+    } catch (error) {
+        
+        return resp.json({
+            ok:false,
+            msg:error
+        })
+    }
+}
 export const createUser = async(req:Request, resp:Response) =>{
     try {
         
-        const {nuevoUsuario}=req.body;
+        req.body.id = shortId.generate();
+        req.body.status = true 
+        const nuevoUsuario=req.body;
+        console.log(nuevoUsuario);
 
         const existeId = await usuarios.findByPk(req.body.id);
 
@@ -16,6 +38,7 @@ export const createUser = async(req:Request, resp:Response) =>{
         }
 
         const crearUsuario = await usuarios.create(nuevoUsuario)
+
         crearUsuario.save();
 
         console.log(req.body);

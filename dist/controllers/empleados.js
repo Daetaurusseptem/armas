@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleados = void 0;
+exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleados = void 0;
 const empleados_1 = require("../models/empleados");
 const empresas_1 = require("../models/empresas");
 const shortid_1 = __importDefault(require("shortid"));
@@ -24,6 +24,21 @@ const getEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* 
     });
 });
 exports.getEmpleados = getEmpleados;
+const getEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { idEmpleado } = req.params;
+    const empleado = yield empleados_1.empleados.findOne({ where: { id: idEmpleado } });
+    if (!empleado) {
+        resp.status(404).json({
+            ok: false,
+            msg: 'El empleado no existe'
+        });
+    }
+    return resp.json({
+        ok: true,
+        empleados: empleado
+    });
+});
+exports.getEmpleado = getEmpleado;
 const createEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const nuevoEmpleado = req.body;
     try {

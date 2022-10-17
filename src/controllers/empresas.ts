@@ -22,7 +22,7 @@ export const createEmpresa = async(req:Request, resp:Response)=>{
                 ok:false,
                 msg:'ID Empresa ya existe'
             })
-        }
+        }       
         //Si no existe se crea el Empresa
         const crearEmpresa = await empresas.create(req.body)
         crearEmpresa.save();

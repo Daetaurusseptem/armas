@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const user_1 = require("../controllers/user");
+const permisos_1 = require("../controllers/permisos");
 const router = (0, express_1.Router)();
-router.get('/', user_1.getUsers);
-router.post('/', user_1.createUser);
+//POST - Crear Prmiso para cierta area
+router.post('/:idUsuario/:idArea/:tipo', permisos_1.agregarPermiso);
 exports.default = router;

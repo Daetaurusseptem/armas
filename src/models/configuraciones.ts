@@ -2,7 +2,7 @@ import sequelize from '../db/db';
 import {
     DataTypes
 } from 'sequelize';
-
+ 
 
 export const configuraciones = sequelize.define('Configuraciones', {
     id: {

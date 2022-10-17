@@ -14,8 +14,7 @@ const areas_1 = require("../models/areas");
 const permisos_1 = require("../models/permisos");
 const usuarios_1 = require("../models/usuarios");
 const agregarPermiso = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { idUsuario, idArea } = req.params;
-    const { tipo } = req.body;
+    const { idUsuario, idArea, tipo } = req.params;
     const areaDB = yield areas_1.areas.findByPk(idArea);
     const usuarioDB = yield usuarios_1.usuarios.findByPk(idUsuario);
     if (!usuarioDB) {
@@ -35,10 +34,18 @@ const agregarPermiso = (req, resp) => __awaiter(void 0, void 0, void 0, function
     if (permisosDB) {
         permisosDB.destroy();
         permisosDB.save();
+        return resp.status(200).json({
+            ok: true,
+            msg: 'Permisos revocados'
+        });
     }
     else {
         const crearPrivilegios = yield permisos_1.permisos.create({ usuarioId: idUsuario, areaId: idArea, tipo });
         yield crearPrivilegios.save();
+        return resp.status(200).json({
+            ok: false,
+            msg: 'Permisos Agregados'
+        });
     }
 });
 exports.agregarPermiso = agregarPermiso;

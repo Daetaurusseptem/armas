@@ -4,8 +4,10 @@ import routesEmpleados from '../routes/empleados.routes';
 import routesEmpresas from '../routes/empresas.routes';
 import routesUsers from '../routes/usuarios.routes';
 import routesAreas from '../routes/areas.routes';
+import routesPermisos from '../routes/permisos.routes';
 import routesDepartamentos from '../routes/departamentos.routes';
 import shortId from 'shortid';
+const cors = require('cors')
 
 export class Server{
     private app : Application;
@@ -28,9 +30,11 @@ export class Server{
         this.app.use('/api/empresas', routesEmpresas );
         this.app.use('/api/areas', routesAreas );
         this.app.use('/api/departamentos', routesDepartamentos );
+        this.app.use('/api/permisos', routesPermisos );
     }
     middlewares(){
         this.app.use(express.json());
+        this.app.use(cors());
     }
     async dbConnect(){
         try { 

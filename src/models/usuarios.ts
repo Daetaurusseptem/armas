@@ -6,8 +6,8 @@ import {
 
 export const usuarios = sequelize.define('Usuarios', {
     id: {
-        type: DataTypes.STRING(8),
-        primaryKey: true
+        type: DataTypes.STRING(9),   
+        primaryKey: true 
     },
     img:{
         type:DataTypes.STRING(100)

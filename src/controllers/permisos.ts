@@ -6,8 +6,8 @@ import { usuarios } from "../models/usuarios";
 
 export const agregarPermiso =async(req:Request, resp:Response)=>{
     
-    const {idUsuario, idArea} =req.params;
-    const {tipo} =req.body;
+    const {idUsuario, idArea, tipo} =req.params;
+    
 
     const areaDB = await areas.findByPk(idArea);
     
@@ -32,9 +32,17 @@ export const agregarPermiso =async(req:Request, resp:Response)=>{
     if(permisosDB){
         permisosDB.destroy()
         permisosDB.save()
+        return resp.status(200).json({
+            ok:true,
+            msg:'Permisos revocados'
+        })
     }else{
         const crearPrivilegios =  await permisos.create({usuarioId:idUsuario, areaId:idArea, tipo})
         await crearPrivilegios.save();
+        return resp.status(200).json({
+            ok:false,
+            msg:'Permisos Agregados'
+        })
     }
     
 }

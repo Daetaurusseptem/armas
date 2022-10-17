@@ -8,7 +8,7 @@ const db_1 = __importDefault(require("../db/db"));
 const sequelize_1 = require("sequelize");
 exports.usuarios = db_1.default.define('Usuarios', {
     id: {
-        type: sequelize_1.DataTypes.STRING(8),
+        type: sequelize_1.DataTypes.STRING(9),
         primaryKey: true
     },
     img: {
