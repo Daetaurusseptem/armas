@@ -36,7 +36,7 @@ export class Server{
         this.app.use(express.json());
         this.app.use(cors());
     }
-    async dbConnect(){
+    async dbConnect(){ 
         try { 
             require('../db/assotiations');
             

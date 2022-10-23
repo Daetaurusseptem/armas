@@ -3,9 +3,10 @@ import { usuarios } from '../models/usuarios';
 
 import shortId from'shortid'
 import { permisos } from '../models/permisos';
+import { areas } from '../models/areas';
 export const getUsers = async(req:Request, resp:Response) =>{
     try {
-        const listaUsuarios = await usuarios.findAll({include:{association:permisos}});
+        const listaUsuarios = await usuarios.findAll({include:{model:areas}});
         
         return resp.json({
             ok:true,
@@ -13,10 +14,34 @@ export const getUsers = async(req:Request, resp:Response) =>{
         })
         
     } catch (error) {
-        
+        console.log(error);
         return resp.json({
             ok:false,
             msg:error
+        })
+    }
+}
+export const getUser = async(req:Request, resp:Response) =>{
+    try {
+        const {idUsuario} = req.params
+        const Usuario = await usuarios.findOne({where:{id:idUsuario}, include:{model:areas}});
+        
+        if(!Usuario){
+            return resp.status(404).json({
+                ok:false,
+                msg:'No se encontro el usuario con id' + idUsuario
+            })
+        }
+        return resp.json({
+            ok:true,
+            usuario:Usuario
+        })
+        
+    } catch (error) {
+        console.log(error);
+        return resp.json({
+            ok:false,
+            msg:'Hubo un error inesperado: '+error
         })
     }
 }
@@ -56,8 +81,9 @@ export const createUser = async(req:Request, resp:Response) =>{
 }
 export const updateUser = async (req:Request, resp:Response) => {
     const {userId}= req.params;
-
-    const userExiste = await usuarios.findByPk(userId);
+    try {
+        const userExiste = await usuarios.findByPk(userId);
+        
 
     if(!userExiste){
         return resp.status(400).json({
@@ -65,8 +91,20 @@ export const updateUser = async (req:Request, resp:Response) => {
             msg:'Este empleado no existe'
         })
     }
+    console.log(req.body);
+    const updateUser = await usuarios.update(req.body, {where:{id:userId}})
 
-    const updateUser = await usuarios.update({where:{empresaId:userId}},req.body)
+    return resp.status(200).json({
+        ok:true,
+        msg:'Usuario Actualizado'
+    })
+    } catch (error) {
+        return resp.status(400).json({
+            ok:false,
+            msg:'Error inesperado'+error
+        })
+    }
+    
 }
 export const login = (req:Request, resp:Response) =>{
     //SIN ENCRIPTAR CONTRASENAS
