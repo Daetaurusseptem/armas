@@ -28,7 +28,7 @@ export const getUser = async(req:Request, resp:Response) =>{
         
         if(!Usuario){
             return resp.status(404).json({
-                ok:false,
+                ok:false, 
                 msg:'No se encontro el usuario con id' + idUsuario
             })
         }

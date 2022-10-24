@@ -1,15 +1,41 @@
 import { Request, Response } from "express";
 import { empresas } from "../models/empresas";
-
+//GET - Obtener Empresas
 export const getEmpresas = async(req:Request, resp:Response) =>{
     const listaEmpresas = await empresas.findAll();
     
     return resp.json({
         ok:true,
-        empleados:listaEmpresas
+        empresas:listaEmpresas
     })
 }
+//GET - Obtener Empresa - params: idEmpresa
+export const getEmpresa = async(req:Request, resp:Response) =>{
 
+    try {
+        const {idEmpresa} = req.params
+        const empresaDb = await empresas.findByPk(idEmpresa);
+
+        if(!empresaDb){
+            return resp.json({
+                ok:false,
+                msg:'No se encontro la empresa'
+            })
+        }
+    
+    return resp.status(200).json({
+        ok:true,
+        empresa:empresaDb
+    })
+    } catch (error) {
+        return resp.json({
+            ok:false,
+            msg:'Hubo un error inesperado', error
+        })
+    }
+    
+}
+//POST - Crear Empresa
 export const createEmpresa = async(req:Request, resp:Response)=>{
     
     const nuevoEmpresa= req.body
