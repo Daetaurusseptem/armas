@@ -4,5 +4,5 @@ const express_1 = require("express");
 const permisos_1 = require("../controllers/permisos");
 const router = (0, express_1.Router)();
 //POST - Crear Prmiso para cierta area
-router.post('/:idUsuario/:idArea/:tipo', permisos_1.agregarPermiso);
+router.post('/:idUsuario/:idArea/:tipo', permisos_1.agregarEliminarPermiso);
 exports.default = router;

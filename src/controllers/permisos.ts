@@ -4,7 +4,7 @@ import { permisos } from "../models/permisos";
 import { usuarios } from "../models/usuarios";
 
 
-export const agregarPermiso =async(req:Request, resp:Response)=>{
+export const agregarEliminarPermiso =async(req:Request, resp:Response)=>{
     
     const {idUsuario, idArea, tipo} =req.params;
     

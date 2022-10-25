@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.agregarPermiso = void 0;
+exports.agregarEliminarPermiso = void 0;
 const areas_1 = require("../models/areas");
 const permisos_1 = require("../models/permisos");
 const usuarios_1 = require("../models/usuarios");
-const agregarPermiso = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+const agregarEliminarPermiso = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { idUsuario, idArea, tipo } = req.params;
     const areaDB = yield areas_1.areas.findByPk(idArea);
     const usuarioDB = yield usuarios_1.usuarios.findByPk(idUsuario);
@@ -48,4 +48,4 @@ const agregarPermiso = (req, resp) => __awaiter(void 0, void 0, void 0, function
         });
     }
 });
-exports.agregarPermiso = agregarPermiso;
+exports.agregarEliminarPermiso = agregarEliminarPermiso;
