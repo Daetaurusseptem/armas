@@ -3,11 +3,11 @@ import { empleados } from '../models/empleados';
 import { empresas } from '../models/empresas';
 
 
-const sequelize = new Sequelize('prueba','sa','123',
+const sequelize = new Sequelize('prueba','jaime','123',
 {
     host:'localhost',
     dialect:'mssql',
-    port: 49695
+    port: 49673
     //port laptop:49673
     //port pc:49695
 } 

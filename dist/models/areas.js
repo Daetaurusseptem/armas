@@ -17,6 +17,9 @@ exports.areas = db_1.default.define('Areas', {
         type: sequelize_1.DataTypes.STRING(30),
         allowNull: false
     },
+    ruta: {
+        type: sequelize_1.DataTypes.STRING(250)
+    },
     descripcion: {
         type: sequelize_1.DataTypes.STRING(30),
         allowNull: false

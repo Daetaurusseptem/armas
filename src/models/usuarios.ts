@@ -9,6 +9,10 @@ export const usuarios = sequelize.define('Usuarios', {
         type: DataTypes.STRING(9),   
         primaryKey: true 
     },
+    role:{
+        type:DataTypes.STRING(10),
+        defaultValue:'USER_ROLE'
+    },
     img:{
         type:DataTypes.STRING(100)
     },

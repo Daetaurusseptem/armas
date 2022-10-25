@@ -14,7 +14,10 @@ export const areas = sequelize.define('Areas', {
     nombre: {
         type: DataTypes.STRING(30),
         allowNull:false
-    }, 
+    },
+    ruta:{
+        type:DataTypes.STRING(250)
+    },
     descripcion:{
         type:DataTypes.STRING(30),
         allowNull:false

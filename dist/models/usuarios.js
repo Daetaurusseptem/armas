@@ -11,6 +11,10 @@ exports.usuarios = db_1.default.define('Usuarios', {
         type: sequelize_1.DataTypes.STRING(9),
         primaryKey: true
     },
+    role: {
+        type: sequelize_1.DataTypes.STRING(10),
+        defaultValue: 'USER_ROLE'
+    },
     img: {
         type: sequelize_1.DataTypes.STRING(100)
     },
