@@ -5,7 +5,7 @@ export const getMenuFrontEnd =(role='admin')=>{
       title:'',
       icon: 'mdi mdi-gauge',
       submenu: [
-      ]
+      ] 
     }
   ];
 
@@ -14,13 +14,11 @@ export const getMenuFrontEnd =(role='admin')=>{
   if(role==='ADMIN_ROLE'){
     menu[0].title='admin'
     menu[0].submenu.unshift(
-      {title:'Alumnos', url:'alumnos'},
-      {title:'Maestros', url:'maestros'},
-      {title:'Materias', url:'materias'},
-      {title:'Eventos', url:'eventos'},
-      {title:'Crear Maestro', url:'crear-maestro'},
-      {title:'Crear Materia', url:'materias/crear-materia'},
-      {title:'Crear Evento', url:'crear-evento'},
+          {title:'Usuarios', url:'usuarios'},
+          {title:'Empresas', url:'empresas'},
+          {title:'Departamentos', url:'departamentos'},
+          {title:'Areas', url:'areas'},
+          {title:'expedientes', url:'expedientes'}
     );
   }
   

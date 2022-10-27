@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.renewToken = exports.login = void 0;
 const usuarios_1 = require("./../models/usuarios");
 const jwt_1 = require("../helpers/jwt");
-const Usuarios = require("../models/usuarios");
 const bcrypt = require('bcrypt');
 const { getMenuFrontEnd } = require("../helpers/menu-frontend");
 const login = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
@@ -22,7 +21,7 @@ const login = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
         if (!usuarioDB) {
             return resp.status(404).json({
                 ok: false,
-                msg: 'correo invalido'
+                msg: 'Datos no validos'
             });
         }
         // const validPassword = bcrypt.compareSync(password, usuarioDB.getDataValue('password'));
@@ -35,10 +34,10 @@ const login = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
         if (password != usuarioDB.getDataValue('password')) {
             return resp.status(400).json({
                 ok: false,
-                msg: 'password invalido'
+                msg: 'Datos no validos'
             });
         }
-        const token = yield (0, jwt_1.generarJWT)(usuarioDB.getDataValue('password'));
+        const token = yield (0, jwt_1.generarJWT)(usuarioDB.getDataValue('id'));
         return resp.status(200).json({
             ok: true,
             token,
@@ -57,13 +56,14 @@ const renewToken = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     const uid = req.uid;
     const token = yield (0, jwt_1.generarJWT)(uid);
     //return user
-    let usuario = yield Usuarios.findById(uid);
+    console.log("sd", uid);
+    let usuario = yield usuarios_1.usuarios.findByPk(uid);
     return resp.status(200).json({
         ok: true,
         token,
         uid,
         usuario,
-        menu: getMenuFrontEnd(usuario.role)
+        menu: getMenuFrontEnd(usuario === null || usuario === void 0 ? void 0 : usuario.getDataValue('role'))
     });
 });
 exports.renewToken = renewToken;

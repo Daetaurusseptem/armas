@@ -1,7 +1,7 @@
-import { Response, Request }  from'express';
+import { Response, Request, NextFunction }  from'express';
 const jwt  = require('jsonwebtoken');
  
-exports.validarJWT = (req : any, resp : Response, next:any)=>{
+exports.validarJWT = (req : any, resp : Response, next:NextFunction)=>{
 
     const token = req.header('x-token');
 
@@ -16,12 +16,11 @@ exports.validarJWT = (req : any, resp : Response, next:any)=>{
 
         const {uid} = jwt.verify(token, process.env.JWT_SECRET);
         req.uid = uid;
-
         next();
         
     } catch (error) {
         return resp.status(401).json({
-            ok:false,
+            ok:false, 
             msg:"token no valido"
         });
     }

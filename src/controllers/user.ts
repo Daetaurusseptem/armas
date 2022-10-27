@@ -62,9 +62,9 @@ export const createUser = async(req:Request, resp:Response) =>{
         }
 
         //password encrypt
-        const salt = bcrypt.genSaltSync();
-        const passNotEncrypted = req.body.password
-        req.body.password = bcrypt.hashSync(passNotEncrypted, salt);
+        // const salt = bcrypt.genSaltSync();
+        // const passNotEncrypted = req.body.password
+        // req.body.password = bcrypt.hashSync(passNotEncrypted, salt);
 
         const crearUsuario = await usuarios.create(nuevoUsuario)
         

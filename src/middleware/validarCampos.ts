@@ -10,7 +10,7 @@ export const validarCampos = (req:Request, resp: Response, next:NextFunction) =>
 
     if (!errors.isEmpty()) {
         return resp.status(404).json({
-            ok: false,
+            ok: false, 
             errors: errors.mapped()
         })
     }

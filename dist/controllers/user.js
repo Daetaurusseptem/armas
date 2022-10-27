@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
 const usuarios_1 = require("../models/usuarios");
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const shortid_1 = __importDefault(require("shortid"));
 const areas_1 = require("../models/areas");
 const getUsers = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
@@ -72,9 +71,9 @@ const createUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
             });
         }
         //password encrypt
-        const salt = bcrypt_1.default.genSaltSync();
-        const passNotEncrypted = req.body.password;
-        req.body.password = bcrypt_1.default.hashSync(passNotEncrypted, salt);
+        // const salt = bcrypt.genSaltSync();
+        // const passNotEncrypted = req.body.password
+        // req.body.password = bcrypt.hashSync(passNotEncrypted, salt);
         const crearUsuario = yield usuarios_1.usuarios.create(nuevoUsuario);
         crearUsuario.save();
         console.log(req.body);

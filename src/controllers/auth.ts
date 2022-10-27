@@ -1,6 +1,5 @@
 import { usuarios } from './../models/usuarios';
 import { generarJWT } from "../helpers/jwt";
-const Usuarios = require("../models/usuarios");
 const bcrypt = require('bcrypt');
 const { getMenuFrontEnd } = require("../helpers/menu-frontend");
 import {Request, Response} from 'express';
@@ -20,7 +19,7 @@ export const login = async  (req:Request, resp:Response)=>{
         if(!usuarioDB){
             return resp.status(404).json({
                 ok:false,
-                msg:'correo invalido'
+                msg:'Datos no validos'
             })
         }
 
@@ -34,11 +33,11 @@ export const login = async  (req:Request, resp:Response)=>{
         if(password!=usuarioDB.getDataValue('password')){
             return resp.status(400).json({
                 ok:false,
-                msg:'password invalido'
+                msg:'Datos no validos'
             })
         }
         
-        const token = await generarJWT(usuarioDB.getDataValue('password'));
+        const token = await generarJWT(usuarioDB.getDataValue('id'));
         return resp.status(200).json({
             ok:true,
             token,
@@ -64,7 +63,8 @@ export const renewToken = async(req:any, resp:Response)=>{
     const token =await generarJWT(uid);
 
     //return user
-    let usuario = await Usuarios.findById(uid);    
+    console.log("sd",uid);
+    let usuario = await usuarios.findByPk(uid);    
 
 
     return resp.status(200).json({
@@ -72,7 +72,7 @@ export const renewToken = async(req:any, resp:Response)=>{
         token,
         uid,
         usuario,
-        menu:getMenuFrontEnd(usuario.role)
+        menu:getMenuFrontEnd(usuario?.getDataValue('role'))
 
     });
 
