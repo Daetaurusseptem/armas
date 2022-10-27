@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
+exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
 const usuarios_1 = require("../models/usuarios");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const shortid_1 = __importDefault(require("shortid"));
 const areas_1 = require("../models/areas");
 const getUsers = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
@@ -70,6 +71,10 @@ const createUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
                 body: req.body
             });
         }
+        //password encrypt
+        const salt = bcrypt_1.default.genSaltSync();
+        const passNotEncrypted = req.body.password;
+        req.body.password = bcrypt_1.default.hashSync(passNotEncrypted, salt);
         const crearUsuario = yield usuarios_1.usuarios.create(nuevoUsuario);
         crearUsuario.save();
         console.log(req.body);
@@ -111,12 +116,3 @@ const updateUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.updateUser = updateUser;
-const login = (req, resp) => {
-    //SIN ENCRIPTAR CONTRASENAS
-    return resp.json({
-        ok: true,
-        msg: "Inicio sesion",
-        body: req.body
-    });
-};
-exports.login = login;

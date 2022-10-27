@@ -68,9 +68,14 @@ export const createEmpresa = async(req:Request, resp:Response)=>{
 }
 
 export const updateEmpresa= async (req:Request, resp:Response) => {
-    const {empresaId}= req.params;
+    
 
-    const empresaExiste = await empresas.findByPk(empresaId);
+    try {
+        
+        const {idEmpresa} = req.params;
+        
+
+    const empresaExiste = await empresas.findByPk(idEmpresa);
 
     if(!empresaExiste){
         return resp.status(400).json({
@@ -78,6 +83,21 @@ export const updateEmpresa= async (req:Request, resp:Response) => {
             msg:'Este empleado no existe'
         })
     }
+    console.log(req.body);
+    const updateEmpresa = await empresas.update(req.body, {where:{id:idEmpresa}})
+    return resp.status(200).json({
+        ok:false,
+        msg:'Empresa actualizada'
+    })
 
-    const updateEmpresa = await empresas.update({where:{id:empresaId}},req.body)
+    } catch (error) {
+        
+        return resp.status(500).json({
+            ok:false,
+            msg:'Hubo un error inesperado'+ error
+        })
+
+    }
 }
+
+ 

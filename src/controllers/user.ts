@@ -1,8 +1,7 @@
-import {Request, response, Response} from 'express';
+import {Request, Response} from 'express';
 import { usuarios } from '../models/usuarios';
-
+import bcrypt from 'bcrypt';
 import shortId from'shortid'
-import { permisos } from '../models/permisos';
 import { areas } from '../models/areas';
 export const getUsers = async(req:Request, resp:Response) =>{
     try {
@@ -31,7 +30,7 @@ export const getUser = async(req:Request, resp:Response) =>{
                 ok:false, 
                 msg:'No se encontro el usuario con id' + idUsuario
             })
-        }
+        } 
         return resp.json({
             ok:true,
             usuario:Usuario
@@ -62,8 +61,13 @@ export const createUser = async(req:Request, resp:Response) =>{
             })
         }
 
-        const crearUsuario = await usuarios.create(nuevoUsuario)
+        //password encrypt
+        const salt = bcrypt.genSaltSync();
+        const passNotEncrypted = req.body.password
+        req.body.password = bcrypt.hashSync(passNotEncrypted, salt);
 
+        const crearUsuario = await usuarios.create(nuevoUsuario)
+        
         crearUsuario.save();
 
         console.log(req.body);
@@ -105,12 +109,4 @@ export const updateUser = async (req:Request, resp:Response) => {
         })
     }
     
-}
-export const login = (req:Request, resp:Response) =>{
-    //SIN ENCRIPTAR CONTRASENAS
-    return resp.json({
-        ok:true,
-        msg:"Inicio sesion",
-        body:req.body
-    }) 
 }

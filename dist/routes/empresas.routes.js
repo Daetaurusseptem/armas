@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const empresas_1 = require("./../controllers/empresas");
 const express_1 = require("express");
-const empresas_2 = require("../controllers/empresas");
 const router = (0, express_1.Router)();
-router.get('/', empresas_2.getEmpresas);
+router.get('/', empresas_1.getEmpresas);
 router.get('/:idEmpresa', empresas_1.getEmpresa);
-router.post('/', empresas_2.createEmpresa);
+router.post('/', empresas_1.createEmpresa);
+router.put('/:idEmpresa', empresas_1.updateEmpresa);
 exports.default = router;

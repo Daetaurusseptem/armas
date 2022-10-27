@@ -1,6 +1,6 @@
 import { permisos } from './../models/permisos';
 import { usuarios } from './../models/usuarios';
-import {Request, response, Response} from 'express';
+import {Request, Response} from 'express';
 import { Empleado } from '../interfaces/pures/empleado.interface';
 import { areas } from '../models/areas';
 import { empleados } from '../models/empleados';

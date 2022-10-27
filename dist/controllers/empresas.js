@@ -73,14 +73,27 @@ const createEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.createEmpresa = createEmpresa;
 const updateEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { empresaId } = req.params;
-    const empresaExiste = yield empresas_1.empresas.findByPk(empresaId);
-    if (!empresaExiste) {
-        return resp.status(400).json({
+    try {
+        const { idEmpresa } = req.params;
+        const empresaExiste = yield empresas_1.empresas.findByPk(idEmpresa);
+        if (!empresaExiste) {
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Este empleado no existe'
+            });
+        }
+        console.log(req.body);
+        const updateEmpresa = yield empresas_1.empresas.update(req.body, { where: { id: idEmpresa } });
+        return resp.status(200).json({
             ok: false,
-            msg: 'Este empleado no existe'
+            msg: 'Empresa actualizada'
         });
     }
-    const updateEmpresa = yield empresas_1.empresas.update({ where: { id: empresaId } }, req.body);
+    catch (error) {
+        return resp.status(500).json({
+            ok: false,
+            msg: 'Hubo un error inesperado' + error
+        });
+    }
 });
 exports.updateEmpresa = updateEmpresa;
