@@ -12,7 +12,7 @@ export const getMenuFrontEnd =(role='admin')=>{
 
   
   if(role==='ADMIN_ROLE'){
-    menu[0].title='admin'
+    menu[0].title='ADMIN TOOLS'
     menu[0].submenu.unshift(
           {title:'Usuarios', url:'usuarios'},
           {title:'Empresas', url:'empresas'},
@@ -24,9 +24,9 @@ export const getMenuFrontEnd =(role='admin')=>{
   
   if(role==='USER_ROLE'){
     
-    menu[0].title='Herramientas Maestro'
+    menu[0].title='Herramientas Usuario'
     menu[0].submenu.unshift(
-      {title:'Materias', url:'materias-maestro'}
+      {title:'Empleados', url:'empleados'}
       );
   }
   

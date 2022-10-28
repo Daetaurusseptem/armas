@@ -10,12 +10,12 @@ const getMenuFrontEnd = (role = 'admin') => {
         }
     ];
     if (role === 'ADMIN_ROLE') {
-        menu[0].title = 'admin';
+        menu[0].title = 'ADMIN TOOLS';
         menu[0].submenu.unshift({ title: 'Usuarios', url: 'usuarios' }, { title: 'Empresas', url: 'empresas' }, { title: 'Departamentos', url: 'departamentos' }, { title: 'Areas', url: 'areas' }, { title: 'expedientes', url: 'expedientes' });
     }
     if (role === 'USER_ROLE') {
-        menu[0].title = 'Herramientas Maestro';
-        menu[0].submenu.unshift({ title: 'Materias', url: 'materias-maestro' });
+        menu[0].title = 'Herramientas Usuario';
+        menu[0].submenu.unshift({ title: 'Empleados', url: 'empleados' });
     }
     if (role === 'alumno') {
         menu[0].title = 'alumno';
