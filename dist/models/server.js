@@ -21,6 +21,7 @@ const areas_routes_1 = __importDefault(require("../routes/areas.routes"));
 const permisos_routes_1 = __importDefault(require("../routes/permisos.routes"));
 const auth_routes_1 = __importDefault(require("../routes/auth.routes"));
 const departamentos_routes_1 = __importDefault(require("../routes/departamentos.routes"));
+const busqueda_routes_1 = __importDefault(require("../routes/busqueda.routes"));
 const cors = require('cors');
 class Server {
     constructor() {
@@ -42,6 +43,7 @@ class Server {
         this.app.use('/api/departamentos', departamentos_routes_1.default);
         this.app.use('/api/permisos', permisos_routes_1.default);
         this.app.use('/api/auth', auth_routes_1.default);
+        this.app.use('/api/busqueda', busqueda_routes_1.default);
     }
     middlewares() {
         this.app.use(express_1.default.json());

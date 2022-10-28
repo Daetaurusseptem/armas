@@ -7,6 +7,7 @@ import routesAreas from '../routes/areas.routes';
 import routesPermisos from '../routes/permisos.routes';
 import routesAuth from '../routes/auth.routes';
 import routesDepartamentos from '../routes/departamentos.routes';
+import routesBusqueda from '../routes/busqueda.routes';
 import shortId from 'shortid';
 const cors = require('cors')
 
@@ -33,6 +34,7 @@ export class Server{
         this.app.use('/api/departamentos', routesDepartamentos );
         this.app.use('/api/permisos', routesPermisos );
         this.app.use('/api/auth', routesAuth );
+        this.app.use('/api/busqueda', routesBusqueda );
     }
     middlewares(){
         this.app.use(express.json());
