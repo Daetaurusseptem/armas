@@ -114,7 +114,7 @@ const createArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
 exports.createArea = createArea;
 //PUT - Actualizar Area
 const updateArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { areaId } = req.body;
+    const { areaId } = req.params;
     const areaExiste = yield areas_1.areas.findByPk(areaId);
     if (!areaExiste) {
         return resp.status(400).json({

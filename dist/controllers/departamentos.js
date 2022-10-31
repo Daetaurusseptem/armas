@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateDepartamento = exports.createDepartamentos = exports.getDepartamentos = void 0;
+exports.updateDepartamento = exports.createDepartamentos = exports.getDepartamento = exports.getDepartamentos = void 0;
 const departamentos_1 = require("../models/departamentos");
 const getDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const listaDepartamentos = yield departamentos_1.departamentos.findAll();
@@ -19,6 +19,29 @@ const getDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, functi
     });
 });
 exports.getDepartamentos = getDepartamentos;
+const getDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { idDepartamento } = req.params;
+    try {
+        const departamento = yield departamentos_1.departamentos.findByPk(idDepartamento);
+        if (!departamento) {
+            return resp.status(404).json({
+                ok: true,
+                msg: 'Departamento no existe'
+            });
+        }
+        return resp.status(200).json({
+            ok: true,
+            departamento
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: false,
+            msg: "hubo unn error inesperado: ", error
+        });
+    }
+});
+exports.getDepartamento = getDepartamento;
 const createDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const nuevoDepartamento = req.body;
     try {
@@ -27,7 +50,7 @@ const createDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, fun
         if (area) {
             return resp.status(400).json({
                 ok: false,
-                msg: 'id area ya existe'
+                msg: 'id departamento ya existe'
             });
         }
         //Si no existe se crea el empleado
@@ -35,7 +58,7 @@ const createDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, fun
         crearDepartamento.save();
         return resp.status(200).json({
             ok: false,
-            msg: 'area creada exitosamente'
+            msg: 'departamento creado exitosamente'
         });
     }
     catch (error) {

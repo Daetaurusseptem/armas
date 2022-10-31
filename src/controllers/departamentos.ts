@@ -10,6 +10,29 @@ export const getDepartamentos = async(req:Request, resp:Response) =>{
         empleados:listaDepartamentos
     })
 }
+export const getDepartamento = async(req:Request, resp:Response) =>{
+    const {idDepartamento} = req.params
+    try {
+        const departamento = await departamentos.findByPk(idDepartamento);
+        if (!departamento) {
+            return resp.status(404).json({
+                ok:true,
+                msg:'Departamento no existe'
+            })
+        }
+        return resp.status(200).json({
+            ok:true,
+            departamento
+        })
+        
+    } catch (error) {
+        return resp.status(500).json({
+            ok:false,
+            msg:"hubo unn error inesperado: ", error
+        })
+    }
+  
+}
 export const createDepartamentos =async (req:Request, resp:Response) =>{
 
     const nuevoDepartamento= req.body
@@ -20,7 +43,7 @@ export const createDepartamentos =async (req:Request, resp:Response) =>{
         if(area){
             return resp.status(400).json({
                 ok:false,
-                msg:'id area ya existe'
+                msg:'id departamento ya existe'
             })
         }
         //Si no existe se crea el empleado
@@ -29,7 +52,7 @@ export const createDepartamentos =async (req:Request, resp:Response) =>{
  
         return resp.status(200).json({
             ok:false,
-            msg:'area creada exitosamente'
+            msg:'departamento creado exitosamente'
         })
         
     } catch (error) {

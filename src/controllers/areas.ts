@@ -114,7 +114,7 @@ export const createArea =async (req:Request, resp:Response) =>{
 }
 //PUT - Actualizar Area
 export const updateArea= async (req:Request, resp:Response) => {
-    const {areaId }= req.body;
+    const {areaId }= req.params;
 
     const areaExiste = await areas.findByPk(areaId);
 
