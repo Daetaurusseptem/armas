@@ -16,6 +16,7 @@ const usuarios_1 = require("../models/usuarios");
 const sequelize_1 = __importDefault(require("sequelize"));
 const areas_1 = require("../models/areas");
 const empresas_1 = require("../models/empresas");
+const departamentos_1 = require("../models/departamentos");
 const Op = sequelize_1.default.Op;
 exports.busquedaDocumentoColeccion = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -32,6 +33,11 @@ exports.busquedaDocumentoColeccion = (req, resp) => __awaiter(void 0, void 0, vo
                         ]
                     }
                 });
+                return resp.status(200).json({
+                    ok: true,
+                    busqueda,
+                    usuarios: data
+                });
                 break;
             case 'areas':
                 data = yield areas_1.areas.findAll({
@@ -42,6 +48,11 @@ exports.busquedaDocumentoColeccion = (req, resp) => __awaiter(void 0, void 0, vo
                             { id: { [Op.like]: `%${busqueda}%` } }
                         ]
                     }
+                });
+                return resp.status(200).json({
+                    ok: true,
+                    busqueda,
+                    areas: data
                 });
                 break;
             case 'empresas':
@@ -54,6 +65,27 @@ exports.busquedaDocumentoColeccion = (req, resp) => __awaiter(void 0, void 0, vo
                         ]
                     }
                 });
+                return resp.status(200).json({
+                    ok: true,
+                    busqueda,
+                    empresas: data
+                });
+                break;
+            case 'departamentos':
+                data = yield departamentos_1.departamentos.findAll({
+                    where: {
+                        [Op.or]: [
+                            { nombre: { [Op.like]: `%${busqueda}%` } },
+                            { descripcion: { [Op.like]: `%${busqueda}%` } },
+                            { id: { [Op.like]: `%${busqueda}%` } }
+                        ]
+                    }
+                });
+                return resp.status(200).json({
+                    ok: true,
+                    busqueda,
+                    departamentos: data
+                });
                 break;
             //  case 'departamento':
             //          data = await Eventos.find({nombre:regEx})
@@ -65,11 +97,6 @@ exports.busquedaDocumentoColeccion = (req, resp) => __awaiter(void 0, void 0, vo
                     msg: "Coleccion invalida"
                 });
         }
-        return resp.status(200).json({
-            ok: true,
-            busqueda,
-            resultados: data
-        });
     }
     catch (error) {
         console.log(error);

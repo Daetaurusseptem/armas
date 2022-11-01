@@ -7,11 +7,12 @@ export const getDepartamentos = async(req:Request, resp:Response) =>{
     
     return resp.json({
         ok:true,
-        empleados:listaDepartamentos
+        departamentos:listaDepartamentos
     })
 }
 export const getDepartamento = async(req:Request, resp:Response) =>{
     const {idDepartamento} = req.params
+    console.log(idDepartamento);
     try {
         const departamento = await departamentos.findByPk(idDepartamento);
         if (!departamento) {

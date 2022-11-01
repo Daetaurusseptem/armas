@@ -15,12 +15,13 @@ const getDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, functi
     const listaDepartamentos = yield departamentos_1.departamentos.findAll();
     return resp.json({
         ok: true,
-        empleados: listaDepartamentos
+        departamentos: listaDepartamentos
     });
 });
 exports.getDepartamentos = getDepartamentos;
 const getDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { idDepartamento } = req.params;
+    console.log(idDepartamento);
     try {
         const departamento = yield departamentos_1.departamentos.findByPk(idDepartamento);
         if (!departamento) {

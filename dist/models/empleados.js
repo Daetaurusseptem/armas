@@ -21,30 +21,11 @@ exports.empleados = db_1.default.define('Empleados', {
         type: sequelize_1.DataTypes.STRING(30),
         allowNull: false
     },
-    apellido_paterno: {
-        type: sequelize_1.DataTypes.STRING(30),
-        allowNull: false
-    },
-    apellido_materno: {
-        type: sequelize_1.DataTypes.STRING(30)
-    },
-    fecha_ingreso: {
-        type: sequelize_1.DataTypes.DATE(),
-        allowNull: false
-    },
-    sexo: {
-        type: sequelize_1.DataTypes.CHAR(1),
-        allowNull: false
-    },
     status: {
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: false
     },
     actualizo: {
-        type: sequelize_1.DataTypes.STRING(8),
-        allowNull: false
-    },
-    jefe_inmediato: {
         type: sequelize_1.DataTypes.STRING(8),
         allowNull: false
     }

@@ -11,11 +11,11 @@ import { usuarios } from "../models/usuarios"
 //Campo empresaId en tabla empleados
 empleados.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId',allowNull:false}})  
 //Campo empresaId en tabla empleados
+
 empleados.belongsTo(departamentos, {constraints:true, foreignKey:{name:'departamentoId',allowNull:false}})  
+empleados.belongsTo(empleados, {constraints:true, foreignKey:{name:'jefeId',allowNull:false}})  
 
 
- 
- 
 areas.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId', allowNull:false}}) 
 
 tipo_expedientes.belongsTo(areas, {constraints:true, foreignKey:{name:'areaId', allowNull:false}})
@@ -28,10 +28,6 @@ areas.belongsToMany(usuarios,   {through:permisos, constraints:true, foreignKey:
 usuarios.belongsToMany(areas,  {through:permisos, constraints:true, foreignKey:{name:'usuarioId', allowNull:false}}) 
 
 
-     
-
-require('../db/modelsSync');   
 
 
-
- 
+require('../db/modelsSync');

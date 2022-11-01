@@ -6,6 +6,7 @@ import { usuarios } from '../models/usuarios';
 import Sequelize from 'sequelize';
 import { areas } from '../models/areas';
 import { empresas } from '../models/empresas';
+import { departamentos } from '../models/departamentos';
 
 const Op = Sequelize.Op
 
@@ -13,6 +14,8 @@ const Op = Sequelize.Op
      try {         
          const {busqueda} = req.params;
          const coleccionQuery = req.params.coleccion.toLowerCase()
+
+         
          
          let data = []
          switch (coleccionQuery) {
@@ -25,6 +28,11 @@ const Op = Sequelize.Op
                             ]
                           }
                     })
+                    return resp.status(200).json({
+                      ok:true,
+                      busqueda,
+                      usuarios:data
+                  }) 
                      break;
              case 'areas':
                 data = await areas.findAll({
@@ -35,7 +43,12 @@ const Op = Sequelize.Op
                           { id: { [Op.like]: `%${busqueda}%` } }
                         ]
                       }
-                })           
+                })   
+                return resp.status(200).json({
+                  ok:true,
+                  busqueda,
+                  areas:data
+              })         
                      break;
              case 'empresas':
                 data = await empresas.findAll({
@@ -47,6 +60,27 @@ const Op = Sequelize.Op
                         ]
                       }
                 })  
+                return resp.status(200).json({
+                  ok:true,
+                  busqueda,
+                  empresas:data
+              }) 
+                     break;
+             case 'departamentos':
+                data = await departamentos.findAll({
+                    where:{
+                        [Op.or]: [
+                          { nombre: { [Op.like]: `%${busqueda}%` } },
+                          { descripcion: { [Op.like]: `%${busqueda}%` } },
+                          { id: { [Op.like]: `%${busqueda}%` } }
+                        ]
+                      }
+                }) 
+                return resp.status(200).json({
+                  ok:true,
+                  busqueda,
+                  departamentos:data
+              }) 
                      break;
             //  case 'departamento':
             //          data = await Eventos.find({nombre:regEx})
@@ -58,11 +92,7 @@ const Op = Sequelize.Op
                          msg:"Coleccion invalida"
                      })                  
              }
-             return resp.status(200).json({
-                 ok:true,
-                 busqueda,
-                 resultados:data
-             })            
+                        
      }catch(error) {
          console.log(error);
          return resp.status(500).json({
