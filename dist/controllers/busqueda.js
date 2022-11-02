@@ -44,7 +44,6 @@ exports.busquedaDocumentoColeccion = (req, resp) => __awaiter(void 0, void 0, vo
                     where: {
                         [Op.or]: [
                             { nombre: { [Op.like]: `%${busqueda}%` } },
-                            { descripcion: { [Op.like]: `%${busqueda}%` } },
                             { id: { [Op.like]: `%${busqueda}%` } }
                         ]
                     }

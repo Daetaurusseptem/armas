@@ -39,7 +39,6 @@ const Op = Sequelize.Op
                     where:{
                         [Op.or]: [
                           { nombre: { [Op.like]: `%${busqueda}%` } },
-                          { descripcion: { [Op.like]: `%${busqueda}%` } },
                           { id: { [Op.like]: `%${busqueda}%` } }
                         ]
                       }

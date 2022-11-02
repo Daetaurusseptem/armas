@@ -10,12 +10,20 @@ import { departamentos } from '../models/departamentos';
 import { Op } from 'sequelize';
 
 export const getEmpleados = async (req: Request, resp: Response) => {
-    const listaEmpleados = await empleados.findAll({ include: empresas });
+    try {
+        const listaEmpleados = await empleados.findAll({ include: empresas });
+        return resp.status(200).json({
+            ok: true,
+            empleados: listaEmpleados
+        })
+    } catch (error) {
+        return resp.status(500).json({
+            ok: true,
+            msg: 'Error inesperado'
+        })
+    }
 
-    return resp.json({
-        ok: true,
-        empleados: listaEmpleados
-    })
+   
 }
     export const getEmpleadosDepartamento = async (req: Request, resp: Response) => {
 

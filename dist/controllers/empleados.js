@@ -19,11 +19,19 @@ const shortid_1 = __importDefault(require("shortid"));
 const departamentos_1 = require("../models/departamentos");
 const sequelize_1 = require("sequelize");
 const getEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const listaEmpleados = yield empleados_1.empleados.findAll({ include: empresas_1.empresas });
-    return resp.json({
-        ok: true,
-        empleados: listaEmpleados
-    });
+    try {
+        const listaEmpleados = yield empleados_1.empleados.findAll({ include: empresas_1.empresas });
+        return resp.status(200).json({
+            ok: true,
+            empleados: listaEmpleados
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: true,
+            msg: 'Error inesperado'
+        });
+    }
 });
 exports.getEmpleados = getEmpleados;
 const getEmpleadosDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {

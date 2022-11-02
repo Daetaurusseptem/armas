@@ -16,11 +16,11 @@ export const getMenuFrontEnd =(role='admin')=>{
     menu[0].id='admin'
     menu[0].icon='bi bi-cone-striped'
     menu[0].submenu.unshift(
-               {title:'Usuarios', url:'usuarios'},
-               {title:'Empresas', url:'empresas'},
-               {title:'Departamentos', url:'departamentos'},
-               {title:'Areas', url:'areas'},
-               {title:'expedientes', url:'expedientes'}
+               {title:'Usuarios', url:'admin/usuarios'},
+               {title:'Empresas', url:'admin/empresas'},
+               {title:'Departamentos', url:'admin/departamentos'},
+               {title:'Areas', url:'admin/areas'},
+               {title:'expedientes', url:'admin/expedientes'}
     );
   }
   
