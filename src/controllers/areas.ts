@@ -14,6 +14,34 @@ export const getAreas = async(req:Request, resp:Response) =>{
         areas:listaAreas
     })
 }
+export const getAreasEmpresa = async(req:Request, resp:Response) =>{
+    try {
+        const {empresaId}=req.params
+        console.log('sdasdasd');
+        const listaAreas = await areas.findAll({where:{empresaId:empresaId}});
+
+        if(!listaAreas){
+            return resp.status(404).json({
+                ok:true,
+                msg:"No se encontraron areas"
+            })
+        }
+
+        console.log(listaAreas);
+        
+        return resp.status(200).json({
+            ok:true,
+            areas:listaAreas
+        })
+        
+    } catch (error) {
+        return resp.status(500).json({
+            ok:false,
+            msg:'Ocurrio un error inesperado'
+        })
+        
+    }
+}
 //DELETE - Eliminar Permisos de Area de un usuario Indicado - Params: idArea, usuarioId
 export const removeUsuarioPermisos = async(req:Request, resp:Response) =>{
     const {idArea, usuarioId} = req.params

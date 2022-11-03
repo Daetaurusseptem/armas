@@ -14,6 +14,7 @@ const usuarios_1 = require("./../models/usuarios");
 const jwt_1 = require("../helpers/jwt");
 const bcrypt = require('bcrypt');
 const { getMenuFrontEnd } = require("../helpers/menu-frontend");
+const areas_1 = require("../models/areas");
 const login = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { usuario, password } = req.body;
     try {
@@ -57,7 +58,7 @@ const renewToken = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     const token = yield (0, jwt_1.generarJWT)(uid);
     //return user
     console.log("sd", uid);
-    let usuario = yield usuarios_1.usuarios.findByPk(uid);
+    let usuario = yield usuarios_1.usuarios.findByPk(uid, { include: [areas_1.areas] });
     return resp.status(200).json({
         ok: true,
         token,

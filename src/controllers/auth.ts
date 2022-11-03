@@ -3,6 +3,7 @@ import { generarJWT } from "../helpers/jwt";
 const bcrypt = require('bcrypt');
 const { getMenuFrontEnd } = require("../helpers/menu-frontend");
 import {Request, Response} from 'express';
+import { areas } from '../models/areas';
 
 
 
@@ -64,7 +65,7 @@ export const renewToken = async(req:any, resp:Response)=>{
 
     //return user
     console.log("sd",uid);
-    let usuario = await usuarios.findByPk(uid);    
+    let usuario = await usuarios.findByPk(uid,{include:[areas]});    
 
 
     return resp.status(200).json({

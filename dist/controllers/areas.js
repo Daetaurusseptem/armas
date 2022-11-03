@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateArea = exports.createArea = exports.getAreaUsers = exports.getArea = exports.removeUsuarioPermisos = exports.getAreas = void 0;
+exports.updateArea = exports.createArea = exports.getAreaUsers = exports.getArea = exports.removeUsuarioPermisos = exports.getAreasEmpresa = exports.getAreas = void 0;
 const permisos_1 = require("./../models/permisos");
 const areas_1 = require("../models/areas");
 //GET - Obtener Areas
@@ -21,6 +21,31 @@ const getAreas = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.getAreas = getAreas;
+const getAreasEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { empresaId } = req.params;
+        console.log('sdasdasd');
+        const listaAreas = yield areas_1.areas.findAll({ where: { empresaId: empresaId } });
+        if (!listaAreas) {
+            return resp.status(404).json({
+                ok: true,
+                msg: "No se encontraron areas"
+            });
+        }
+        console.log(listaAreas);
+        return resp.status(200).json({
+            ok: true,
+            areas: listaAreas
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: false,
+            msg: 'Ocurrio un error inesperado'
+        });
+    }
+});
+exports.getAreasEmpresa = getAreasEmpresa;
 //DELETE - Eliminar Permisos de Area de un usuario Indicado - Params: idArea, usuarioId
 const removeUsuarioPermisos = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { idArea, usuarioId } = req.params;

@@ -6,6 +6,8 @@ const areas_2 = require("../controllers/areas");
 const router = (0, express_1.Router)();
 //GET - Obtener todas las areas existentes
 router.get('/', areas_2.getAreas);
+//GET - Obtener area por id | params:empresaId
+router.get('/empresa/:empresaId', areas_1.getAreasEmpresa);
 //GET - Obtener Area por id
 router.get('/:idArea', areas_1.getArea);
 //DELETE - Eliminar Permisos de Area de un usuario Indicado
