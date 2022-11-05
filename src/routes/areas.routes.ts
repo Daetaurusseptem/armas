@@ -8,7 +8,7 @@ const router =  Router();
 //GET - Obtener todas las areas existentes
 router.get( '/', getAreas ) 
 //GET - Obtener area por id | params:empresaId
-router.get( '/empresa/:empresaId', getAreasEmpresa) 
+router.get( '/empresa/:empresaId', getAreasEmpresa)     
 //GET - Obtener Area por id
 router.get( '/:idArea', getArea ) 
 //DELETE - Eliminar Permisos de Area de un usuario Indicado
