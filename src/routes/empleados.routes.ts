@@ -1,6 +1,6 @@
 import {Router} from 'express';
 
-import {getEmpleados, createEmpleado, darDeBajaAlta, getEmpleadosDepartamento, busquedaEmpleadoDepartamento} from '../controllers/empleados';
+import {getEmpleados, createEmpleado, darDeBajaAlta, getEmpleadosDepartamento, busquedaEmpleadoDepartamento, getEmpleadoDepartamento} from '../controllers/empleados';
 
 const router =  Router();
 //GET - Todos los empleados
@@ -9,6 +9,8 @@ router.get( '/', getEmpleados )
 router.get('/:departamentoId', getEmpleadosDepartamento)
 //GET - Buscar empeados dentro de un departamento
 router.get('/:busqueda/:departamentoId/:busqueda', busquedaEmpleadoDepartamento)
+//GET - Comprobar empleado existe en una empresa
+router.get('/comprobar/empresa/:empresaId/:numeroEmpleado', getEmpleadoDepartamento)
 //POST - Crear empleado
 router.post( '/', createEmpleado )
 //PUT - Actualizar Empleado

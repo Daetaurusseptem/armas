@@ -1,14 +1,53 @@
+import { empresas } from './../models/empresas';
 import {Request, Response} from 'express';
 import { departamentos } from '../models/departamentos';
 
 
 export const getDepartamentos = async(req:Request, resp:Response) =>{
-    const listaDepartamentos = await departamentos.findAll();
-    
-    return resp.json({
-        ok:true,
-        departamentos:listaDepartamentos
-    })
+    try {
+        const listaDepartamentos = await departamentos.findAll();
+        
+        return resp.status(200).json({
+            ok:true,
+            departamentos:listaDepartamentos
+        })
+        
+    } catch (error) {
+        
+        return resp.status(404).json({
+            ok:false,
+            msg:'Hubo un error inesperado'+error
+        })
+    }
+}
+export const getDepartamentoEmpresaId = async(req:Request, resp:Response) =>{
+    try {
+        const {empresaId}=req.params
+
+        const empresa = await empresas.findByPk(empresaId)
+
+        if(!empresa){
+            return resp.status(404).json({
+                ok:false,
+                msg:'Empresa no existe'
+            })
+        }
+
+        const listaDepartamentos = await departamentos.findAll({where:{empresaId}});
+        
+        
+        return resp.status(200).json({
+            ok:true,
+            departamentos:listaDepartamentos
+        })
+        
+    } catch (error) {
+        
+        return resp.status(404).json({
+            ok:false,
+            msg:'Hubo un error inesperado'+error
+        })
+    }
 }
 export const getDepartamento = async(req:Request, resp:Response) =>{
     const {idDepartamento} = req.params

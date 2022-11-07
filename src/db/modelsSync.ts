@@ -9,11 +9,11 @@ import { expedientes  } from "../models/expedientes"
 import { configuraciones  } from "../models/configuraciones" 
 
 empresas.sync()   
-empleados.sync()
 areas.sync()  
 permisos.sync()
 usuarios.sync()
 departamentos.sync()
 tipo_expedientes.sync({}) 
 expedientes.sync() 
-configuraciones.sync() 
+empleados.sync()
+configuraciones.sync()

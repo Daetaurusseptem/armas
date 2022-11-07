@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.busquedaEmpleadoDepartamento = exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadosDepartamento = exports.getEmpleados = void 0;
+exports.busquedaEmpleadoDepartamento = exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
 const empleados_1 = require("../models/empleados");
 const empresas_1 = require("../models/empresas");
 const shortid_1 = __importDefault(require("shortid"));
@@ -23,54 +23,106 @@ const getEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* 
         const listaEmpleados = yield empleados_1.empleados.findAll({ include: empresas_1.empresas });
         return resp.status(200).json({
             ok: true,
-            empleados: listaEmpleados
+            empleados: listaEmpleados,
         });
     }
     catch (error) {
         return resp.status(500).json({
             ok: true,
-            msg: 'Error inesperado'
+            msg: "Error inesperado",
         });
     }
 });
 exports.getEmpleados = getEmpleados;
-const getEmpleadosDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+const getEmpleadosEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { departamentoId } = req.params;
-        console.log('id departamento: ', departamentoId);
-        const listaEmpleados = yield empleados_1.empleados.findAll({ include: [empresas_1.empresas, departamentos_1.departamentos], where: { departamentoId: departamentoId } });
+        const { empresaId } = req.params;
+        console.log("id empresa: ", empresaId);
+        const listaEmpleados = yield empleados_1.empleados.findAll({
+            include: [empresas_1.empresas, departamentos_1.departamentos],
+            where: { empresaId }
+        });
         return resp.json({
             ok: true,
-            empleados: listaEmpleados
+            empleado: listaEmpleados,
         });
     }
     catch (error) {
         return resp.status(500).json({
             ok: true,
-            msg: 'Hubo un error: ' + error
+            msg: "Hubo un error: " + error,
+        });
+    }
+});
+exports.getEmpleadosEmpresa = getEmpleadosEmpresa;
+const getEmpleadosDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { departamentoId } = req.params;
+        console.log("id departamento: ", departamentoId);
+        const listaEmpleados = yield empleados_1.empleados.findAll({
+            include: [empresas_1.empresas, departamentos_1.departamentos],
+            where: { departamentoId: departamentoId },
+        });
+        return resp.json({
+            ok: true,
+            empleados: listaEmpleados,
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: true,
+            msg: "Hubo un error: " + error,
         });
     }
 });
 exports.getEmpleadosDepartamento = getEmpleadosDepartamento;
-const getEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { idEmpleado } = req.params;
+//GET - Comprobar si existe empleado con 
+const getEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const empleado = yield empleados_1.empleados.findOne({ include: [empresas_1.empresas, departamentos_1.departamentos], where: { id: idEmpleado } });
-        if (!empleado) {
-            resp.status(404).json({
+        console.log('sissssasa');
+        const { numeroEmpleado, empresaId } = req.params;
+        const empleadoDepartamento = yield empleados_1.empleados.findOne({ where: { empresaId, numero_empleado: numeroEmpleado } });
+        if (!empleadoDepartamento) {
+            return resp.status(200).json({
                 ok: false,
-                msg: 'El empleado no existe'
+                msg: 'empleado no existe'
             });
         }
         return resp.status(200).json({
             ok: true,
-            empleados: empleado
+            empleado: empleadoDepartamento
         });
     }
     catch (error) {
         return resp.status(500).json({
             ok: true,
-            msg: `Hubo un error inesperado: ${error}`
+            msg: error
+        });
+    }
+});
+exports.getEmpleadoDepartamento = getEmpleadoDepartamento;
+const getEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { idEmpleado } = req.params;
+    try {
+        const empleado = yield empleados_1.empleados.findOne({
+            include: [empresas_1.empresas, departamentos_1.departamentos],
+            where: { id: idEmpleado },
+        });
+        if (!empleado) {
+            resp.status(404).json({
+                ok: false,
+                msg: "El empleado no existe",
+            });
+        }
+        return resp.status(200).json({
+            ok: true,
+            empleados: empleado,
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: true,
+            msg: `Hubo un error inesperado: ${error}`,
         });
     }
 });
@@ -83,18 +135,23 @@ const createEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function
         if (empleado) {
             return resp.status(400).json({
                 ok: false,
-                msg: 'empleado ya existe'
+                msg: "empleado ya existe",
             });
         }
         console.log(req.body.numero_empleado, req.body.empresaId);
         //validacion empresa
-        const empleadoMismaEmpresa = yield empleados_1.empleados.findOne({ where: { numero_empleado: req.body.numero_empleado, empresaId: req.body.empresaId } });
+        const empleadoMismaEmpresa = yield empleados_1.empleados.findOne({
+            where: {
+                numero_empleado: req.body.numero_empleado,
+                empresaId: req.body.empresaId,
+            },
+        });
         console.log(empleado);
         if (empleadoMismaEmpresa) {
-            console.log('entro');
+            console.log("entro");
             return resp.status(400).json({
                 ok: false,
-                msg: 'El empleado ya esta registrado en la empresa'
+                msg: "El empleado ya esta registrado en la empresa",
             });
         }
         req.body.id = shortid_1.default.generate();
@@ -103,13 +160,13 @@ const createEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function
         crearEmpleado.save();
         return resp.status(200).json({
             ok: false,
-            msg: 'empleado creado exitosamente'
+            msg: "empleado creado exitosamente",
         });
     }
     catch (error) {
         return resp.status(500).json({
             ok: false,
-            msg: 'error inesperado: ' + error
+            msg: "error inesperado: " + error,
         });
     }
 });
@@ -120,7 +177,7 @@ const updateEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function
     if (!empleadoExiste) {
         return resp.status(400).json({
             ok: false,
-            msg: 'Este empleado no existe'
+            msg: "Este empleado no existe",
         });
     }
     const updateEmpleado = yield empleados_1.empleados.update({ where: { id: empleadoId } }, req.body);
@@ -131,25 +188,25 @@ const darDeBajaAlta = (req, resp) => __awaiter(void 0, void 0, void 0, function*
         const { idEmpleado } = req.params;
         console.log(idEmpleado);
         const empleadoDB = yield empleados_1.empleados.findByPk(idEmpleado);
-        const nombreUsuario = yield (empleadoDB === null || empleadoDB === void 0 ? void 0 : empleadoDB.getDataValue('nombre'));
+        const nombreUsuario = yield (empleadoDB === null || empleadoDB === void 0 ? void 0 : empleadoDB.getDataValue("nombre"));
         console.log(nombreUsuario);
         if (!empleadoDB) {
             return resp.status(404).json({
                 ok: false,
-                msg: 'error: El usuario no existe'
+                msg: "error: El usuario no existe",
             });
         }
         if (empleadoDB.getDataValue("status")) {
-            empleadoDB.update({ "status": 0 });
+            empleadoDB.update({ status: 0 });
         }
         else {
-            empleadoDB.update({ "status": 1 });
+            empleadoDB.update({ status: 1 });
         }
     }
     catch (error) {
         return resp.status(500).json({
             ok: false,
-            msg: 'error: ' + error
+            msg: "error: " + error,
         });
     }
 });
@@ -158,32 +215,35 @@ const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, vo
     try {
         const { busqueda, departamentoId } = req.params;
         let data = [];
-        data = yield empleados_1.empleados.findAll({ include: [departamentos_1.departamentos, empresas_1.empresas],
+        data = yield empleados_1.empleados.findAll({
+            include: [departamentos_1.departamentos, empresas_1.empresas],
             where: {
                 where: { departamentoId },
                 [sequelize_1.Op.or]: [
-                    { numero_empleado: {
-                            [sequelize_1.Op.like]: `%${busqueda}%`
-                        }
+                    {
+                        numero_empleado: {
+                            [sequelize_1.Op.like]: `%${busqueda}%`,
+                        },
                     },
-                    { nombre: {
-                            [sequelize_1.Op.like]: `%${busqueda}%`
-                        }
-                    }
-                ]
-            }
+                    {
+                        nombre: {
+                            [sequelize_1.Op.like]: `%${busqueda}%`,
+                        },
+                    },
+                ],
+            },
         });
         return resp.status(200).json({
             ok: true,
             busqueda,
-            departamentos: data
+            departamentos: data,
         });
     }
     catch (error) {
         console.log(error);
         return resp.status(500).json({
             ok: false,
-            msg: "Busqueda invalida" + error
+            msg: "Busqueda invalida" + error,
         });
     }
 });

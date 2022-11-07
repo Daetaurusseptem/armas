@@ -13,7 +13,7 @@ empleados.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId',al
 //Campo empresaId en tabla empleados
 
 empleados.belongsTo(departamentos, {constraints:true, foreignKey:{name:'departamentoId',allowNull:false}})  
-empleados.belongsTo(empleados, {constraints:true, foreignKey:{name:'jefeId',allowNull:false}})  
+empleados.belongsTo(empleados, {constraints:true, foreignKey:{name:'jefeId',allowNull:true }})  
 
 
 areas.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId', allowNull:false}}) 
