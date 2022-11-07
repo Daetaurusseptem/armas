@@ -28,6 +28,10 @@ exports.empleados = db_1.default.define('Empleados', {
     actualizo: {
         type: sequelize_1.DataTypes.STRING(8),
         allowNull: false
+    },
+    numero_jefe: {
+        type: sequelize_1.DataTypes.STRING(8),
+        allowNull: true
     }
 }, {
     createdAt: 'creadoEl',

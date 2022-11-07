@@ -33,6 +33,7 @@ export const getMenuFrontEnd =(role='admin')=>{
               {title:'Empresas', url:'empresas'},
               {title:'Empleados', url:'empleados'},
               {title:'Perfil', url:'perfil'},
+              {title:'Departamentos', url:'departamentos'},
            
       );
   }

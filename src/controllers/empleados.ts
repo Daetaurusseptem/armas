@@ -10,7 +10,7 @@ import { and, Op } from "sequelize";
 
 export const getEmpleados = async (req: Request, resp: Response) => {
   try {
-    const listaEmpleados = await empleados.findAll({ include: empresas });
+    const listaEmpleados = await empleados.findAll({ include: [empresas, departamentos],  });
     return resp.status(200).json({
       ok: true,
       empleados: listaEmpleados,
@@ -36,7 +36,7 @@ export const getEmpleadosEmpresa = async (
 
     return resp.json({
       ok: true,
-      empleado: listaEmpleados,
+      empleados: listaEmpleados,
     });
   } catch (error) {
     return resp.status(500).json({
@@ -68,7 +68,7 @@ export const getEmpleadosDepartamento = async (
     });
   }
 };
-//GET - Comprobar si existe empleado con 
+//GET - Obtener empleado por empresa
 export const  getEmpleadoDepartamento = async(req:Request, resp:Response) => {
 
     try {
@@ -213,20 +213,22 @@ export const darDeBajaAlta = async (req: Request, resp: Response) => {
     });
   }
 };
-export const busquedaEmpleadoDepartamento = async (
+export const busquedaEmpleados = async (
   req: Request,
   resp: Response
 ) => {
   try {
-    const { busqueda, departamentoId } = req.params;
+    const { busqueda, empresaId, departamentoId} = req.params;
+
 
     let data: any[] = [];
 
     data = await empleados.findAll({
       include: [departamentos, empresas],
       where: {
-        where: { departamentoId },
+        where: { empresaId },
         [Op.or]: [
+        
           {
             numero_empleado: {
               [Op.like]: `%${busqueda}%`,

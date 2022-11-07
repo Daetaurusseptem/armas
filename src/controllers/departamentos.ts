@@ -24,7 +24,7 @@ export const getDepartamentoEmpresaId = async(req:Request, resp:Response) =>{
     try {
         const {empresaId}=req.params
 
-        const empresa = await empresas.findByPk(empresaId)
+        const empresa = await departamentos.findAll({where:{empresaId}})
 
         if(!empresa){
             return resp.status(404).json({

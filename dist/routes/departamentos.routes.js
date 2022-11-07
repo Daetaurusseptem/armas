@@ -6,4 +6,5 @@ const router = (0, express_1.Router)();
 router.get('/', departamentos_1.getDepartamentos);
 router.get('/:idDepartamento', departamentos_1.getDepartamento);
 router.post('/', departamentos_1.createDepartamentos);
+router.get('/empresa/:empresaId', departamentos_1.getDepartamentoEmpresaId);
 exports.default = router;

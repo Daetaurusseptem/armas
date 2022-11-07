@@ -8,7 +8,9 @@ router.get('/', empleados_1.getEmpleados);
 //GET - Todos los empleados de un departamento
 router.get('/:departamentoId', empleados_1.getEmpleadosDepartamento);
 //GET - Buscar empeados dentro de un departamento
-router.get('/:busqueda/:departamentoId/:busqueda', empleados_1.busquedaEmpleadoDepartamento);
+// router.get('/:busqueda/:departamentoId/:busqueda', empleados_1.busquedaEmpleadoDepartamento);
+//GET - Obtener empleados empresa
+router.get('/empresa/:empresaId', empleados_1.getEmpleadosEmpresa);
 //GET - Comprobar empleado existe en una empresa
 router.get('/comprobar/empresa/:empresaId/:numeroEmpleado', empleados_1.getEmpleadoDepartamento);
 //POST - Crear empleado

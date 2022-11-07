@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.busquedaEmpleadoDepartamento = exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
+exports.busquedaEmpleados = exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
 const empleados_1 = require("../models/empleados");
 const empresas_1 = require("../models/empresas");
 const shortid_1 = __importDefault(require("shortid"));
@@ -20,7 +20,7 @@ const departamentos_1 = require("../models/departamentos");
 const sequelize_1 = require("sequelize");
 const getEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const listaEmpleados = yield empleados_1.empleados.findAll({ include: empresas_1.empresas });
+        const listaEmpleados = yield empleados_1.empleados.findAll({ include: [empresas_1.empresas, departamentos_1.departamentos], });
         return resp.status(200).json({
             ok: true,
             empleados: listaEmpleados,
@@ -44,7 +44,7 @@ const getEmpleadosEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, fun
         });
         return resp.json({
             ok: true,
-            empleado: listaEmpleados,
+            empleados: listaEmpleados,
         });
     }
     catch (error) {
@@ -76,7 +76,7 @@ const getEmpleadosDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.getEmpleadosDepartamento = getEmpleadosDepartamento;
-//GET - Comprobar si existe empleado con 
+//GET - Obtener empleado por empresa
 const getEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('sissssasa');
@@ -211,14 +211,14 @@ const darDeBajaAlta = (req, resp) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.darDeBajaAlta = darDeBajaAlta;
-const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+const busquedaEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { busqueda, departamentoId } = req.params;
+        const { busqueda, empresaId, departamentoId } = req.params;
         let data = [];
         data = yield empleados_1.empleados.findAll({
             include: [departamentos_1.departamentos, empresas_1.empresas],
             where: {
-                where: { departamentoId },
+                where: { empresaId },
                 [sequelize_1.Op.or]: [
                     {
                         numero_empleado: {
@@ -247,4 +247,4 @@ const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, vo
         });
     }
 });
-exports.busquedaEmpleadoDepartamento = busquedaEmpleadoDepartamento;
+exports.busquedaEmpleados = busquedaEmpleados;

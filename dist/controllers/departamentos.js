@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateDepartamento = exports.createDepartamentos = exports.getDepartamento = exports.getDepartamentoEmpresaId = exports.getDepartamentos = void 0;
-const empresas_1 = require("./../models/empresas");
 const departamentos_1 = require("../models/departamentos");
 const getDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -31,7 +30,7 @@ exports.getDepartamentos = getDepartamentos;
 const getDepartamentoEmpresaId = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { empresaId } = req.params;
-        const empresa = yield empresas_1.empresas.findByPk(empresaId);
+        const empresa = yield departamentos_1.departamentos.findAll({ where: { empresaId } });
         if (!empresa) {
             return resp.status(404).json({
                 ok: false,

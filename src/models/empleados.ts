@@ -21,12 +21,15 @@ export const empleados = sequelize.define('Empleados', {
     },
     status: {
         type: DataTypes.BOOLEAN,
-        allowNull:false
-        
+        allowNull:false    
     },
     actualizo: {
         type: DataTypes.STRING(8),
         allowNull:false
+    },
+    numero_jefe:{
+        type:DataTypes.STRING(8),
+        allowNull:true
     }
 }, 
 {
