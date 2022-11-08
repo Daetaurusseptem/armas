@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.busquedaEmpleados = exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
+exports.busquedaEmpleadoDepartamento = exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
 const empleados_1 = require("../models/empleados");
 const empresas_1 = require("../models/empresas");
 const shortid_1 = __importDefault(require("shortid"));
 const departamentos_1 = require("../models/departamentos");
 const sequelize_1 = require("sequelize");
+//*GET - Obtener todos los empleados
 const getEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const listaEmpleados = yield empleados_1.empleados.findAll({ include: [empresas_1.empresas, departamentos_1.departamentos], });
@@ -34,6 +35,7 @@ const getEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.getEmpleados = getEmpleados;
+//*GET - Obtener empleados de una empresa
 const getEmpleadosEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { empresaId } = req.params;
@@ -55,6 +57,7 @@ const getEmpleadosEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.getEmpleadosEmpresa = getEmpleadosEmpresa;
+//*Obtener empleados por deparrtamento -params: departamento id
 const getEmpleadosDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { departamentoId } = req.params;
@@ -128,33 +131,20 @@ const getEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getEmpleado = getEmpleado;
 const createEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const nuevoEmpleado = req.body;
+    const { numero_empleado, empresaId } = req.body;
     try {
         //Se busca si el empleado existe
-        const empleado = yield empleados_1.empleados.findByPk(nuevoEmpleado.id);
-        if (empleado) {
+        const empleadoExiste = yield empleados_1.empleados.findOne({ where: { numero_empleado, empresaId } });
+        if (empleadoExiste) {
             return resp.status(400).json({
                 ok: false,
-                msg: "empleado ya existe",
+                msg: "empleado ya existe en la empresa",
             });
         }
         console.log(req.body.numero_empleado, req.body.empresaId);
         //validacion empresa
-        const empleadoMismaEmpresa = yield empleados_1.empleados.findOne({
-            where: {
-                numero_empleado: req.body.numero_empleado,
-                empresaId: req.body.empresaId,
-            },
-        });
-        console.log(empleado);
-        if (empleadoMismaEmpresa) {
-            console.log("entro");
-            return resp.status(400).json({
-                ok: false,
-                msg: "El empleado ya esta registrado en la empresa",
-            });
-        }
         req.body.id = shortid_1.default.generate();
+        console.log(req.body);
         //Si no existe se crea el empleado
         const crearEmpleado = yield empleados_1.empleados.create(req.body);
         crearEmpleado.save();
@@ -211,7 +201,7 @@ const darDeBajaAlta = (req, resp) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.darDeBajaAlta = darDeBajaAlta;
-const busquedaEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { busqueda, empresaId, departamentoId } = req.params;
         let data = [];
@@ -247,4 +237,4 @@ const busquedaEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, funct
         });
     }
 });
-exports.busquedaEmpleados = busquedaEmpleados;
+exports.busquedaEmpleadoDepartamento = busquedaEmpleadoDepartamento;

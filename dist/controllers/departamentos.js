@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateDepartamento = exports.createDepartamentos = exports.getDepartamento = exports.getDepartamentoEmpresaId = exports.getDepartamentos = void 0;
 const departamentos_1 = require("../models/departamentos");
+//* GET - Todos los departamentos
 const getDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const listaDepartamentos = yield departamentos_1.departamentos.findAll();
@@ -27,6 +28,7 @@ const getDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getDepartamentos = getDepartamentos;
+//* GET - Departamentos por el Id de la empresa
 const getDepartamentoEmpresaId = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { empresaId } = req.params;
@@ -51,6 +53,7 @@ const getDepartamentoEmpresaId = (req, resp) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.getDepartamentoEmpresaId = getDepartamentoEmpresaId;
+//* GET - Obtener un departamento por id del departamento
 const getDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { idDepartamento } = req.params;
     console.log(idDepartamento);
@@ -75,6 +78,7 @@ const getDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getDepartamento = getDepartamento;
+//* POST - Crear departamento 
 const createDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const nuevoDepartamento = req.body;
     try {
@@ -102,6 +106,7 @@ const createDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.createDepartamentos = createDepartamentos;
+//* PUT - Actualizar departamento
 const updateDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { departamentoId } = req.params;
     const empresaExiste = yield departamentos_1.departamentos.findByPk(departamentoId);

@@ -2,7 +2,7 @@ import { empresas } from './../models/empresas';
 import {Request, Response} from 'express';
 import { departamentos } from '../models/departamentos';
 
-
+//* GET - Todos los departamentos
 export const getDepartamentos = async(req:Request, resp:Response) =>{
     try {
         const listaDepartamentos = await departamentos.findAll();
@@ -20,6 +20,7 @@ export const getDepartamentos = async(req:Request, resp:Response) =>{
         })
     }
 }
+//* GET - Departamentos por el Id de la empresa
 export const getDepartamentoEmpresaId = async(req:Request, resp:Response) =>{
     try {
         const {empresaId}=req.params
@@ -49,6 +50,7 @@ export const getDepartamentoEmpresaId = async(req:Request, resp:Response) =>{
         })
     }
 }
+//* GET - Obtener un departamento por id del departamento
 export const getDepartamento = async(req:Request, resp:Response) =>{
     const {idDepartamento} = req.params
     console.log(idDepartamento);
@@ -73,6 +75,7 @@ export const getDepartamento = async(req:Request, resp:Response) =>{
     }
   
 }
+//* POST - Crear departamento 
 export const createDepartamentos =async (req:Request, resp:Response) =>{
 
     const nuevoDepartamento= req.body
@@ -107,6 +110,7 @@ export const createDepartamentos =async (req:Request, resp:Response) =>{
     
 
 }
+//* PUT - Actualizar departamento
 export const updateDepartamento= async (req:Request, resp:Response) => {
     const {departamentoId}= req.params;
 

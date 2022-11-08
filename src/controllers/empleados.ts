@@ -8,6 +8,7 @@ import { areas } from "../models/areas";
 import { departamentos } from "../models/departamentos";
 import { and, Op } from "sequelize";
 
+//*GET - Obtener todos los empleados
 export const getEmpleados = async (req: Request, resp: Response) => {
   try {
     const listaEmpleados = await empleados.findAll({ include: [empresas, departamentos],  });
@@ -22,6 +23,7 @@ export const getEmpleados = async (req: Request, resp: Response) => {
     });
   }
 };
+//*GET - Obtener empleados de una empresa
 export const getEmpleadosEmpresa = async (
   req: Request,
   resp: Response
@@ -45,6 +47,7 @@ export const getEmpleadosEmpresa = async (
     });
   }
 };
+//*Obtener empleados por deparrtamento -params: departamento id
 export const getEmpleadosDepartamento = async (
   req: Request,
   resp: Response
@@ -122,38 +125,24 @@ export const getEmpleado = async (req: Request, resp: Response) => {
   }
 };
 export const createEmpleado = async (req: Request, resp: Response) => {
-  const nuevoEmpleado = req.body;
+  const {numero_empleado, empresaId} = req.body;
 
   try {
     //Se busca si el empleado existe
-    const empleado = await empleados.findByPk(nuevoEmpleado.id);
-    if (empleado) {
+    const empleadoExiste = await empleados.findOne({where:{numero_empleado, empresaId }});
+    if (empleadoExiste) {
       return resp.status(400).json({
         ok: false,
-        msg: "empleado ya existe",
+        msg: "empleado ya existe en la empresa",
       });
     }
     console.log(req.body.numero_empleado, req.body.empresaId);
     //validacion empresa
-    const empleadoMismaEmpresa = await empleados.findOne({
-      where: {
-        numero_empleado: req.body.numero_empleado,
-        empresaId: req.body.empresaId,
-      },
-    });
-
-    console.log(empleado);
-    if (empleadoMismaEmpresa) {
-      console.log("entro");
-      return resp.status(400).json({
-        ok: false,
-        msg: "El empleado ya esta registrado en la empresa",
-      });
-    }
+    
     req.body.id = shortid.generate();
+    console.log(req.body);
     //Si no existe se crea el empleado
     const crearEmpleado = await empleados.create(req.body);
-
     crearEmpleado.save();
 
     return resp.status(200).json({
@@ -213,7 +202,7 @@ export const darDeBajaAlta = async (req: Request, resp: Response) => {
     });
   }
 };
-export const busquedaEmpleados = async (
+export const busquedaEmpleadoDepartamento = async (
   req: Request,
   resp: Response
 ) => {
@@ -255,4 +244,5 @@ export const busquedaEmpleados = async (
       msg: "Busqueda invalida" + error,
     });
   }
+
 };
