@@ -105,12 +105,9 @@ const getEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0,
 });
 exports.getEmpleadoDepartamento = getEmpleadoDepartamento;
 const getEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { idEmpleado } = req.params;
+    const { empleadoId } = req.params;
     try {
-        const empleado = yield empleados_1.empleados.findOne({
-            include: [empresas_1.empresas, departamentos_1.departamentos],
-            where: { id: idEmpleado },
-        });
+        const empleado = yield empleados_1.empleados.findByPk(empleadoId, { include: [empresas_1.empresas, departamentos_1.departamentos] });
         if (!empleado) {
             resp.status(404).json({
                 ok: false,
@@ -119,7 +116,7 @@ const getEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* (
         }
         return resp.status(200).json({
             ok: true,
-            empleados: empleado,
+            empleado: empleado,
         });
     }
     catch (error) {
@@ -162,15 +159,27 @@ const createEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function
 });
 exports.createEmpleado = createEmpleado;
 const updateEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { empleadoId } = req.params;
-    const empleadoExiste = yield empleados_1.empleados.findByPk(empleadoId);
-    if (!empleadoExiste) {
-        return resp.status(400).json({
-            ok: false,
-            msg: "Este empleado no existe",
+    const { idEmpleado } = req.params;
+    try {
+        const empleadoExiste = yield empleados_1.empleados.findByPk(idEmpleado);
+        if (!empleadoExiste) {
+            return resp.status(400).json({
+                ok: false,
+                msg: "Este empleado no existe",
+            });
+        }
+        const updateEmpleado = yield empleados_1.empleados.update(req.body, { where: { id: idEmpleado } });
+        return resp.status(200).json({
+            ok: true,
+            msg: "Empleado Actualizado",
         });
     }
-    const updateEmpleado = yield empleados_1.empleados.update({ where: { id: empleadoId } }, req.body);
+    catch (error) {
+        return resp.status(500).json({
+            ok: false,
+            msg: "Hubo un error inesperado" + error
+        });
+    }
 });
 exports.updateEmpleado = updateEmpleado;
 const darDeBajaAlta = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
@@ -203,8 +212,29 @@ const darDeBajaAlta = (req, resp) => __awaiter(void 0, void 0, void 0, function*
 exports.darDeBajaAlta = darDeBajaAlta;
 const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { busqueda, empresaId, departamentoId } = req.params;
+        const { empresaId, termino } = req.params;
+        const { departamentoId } = req.query;
         let data = [];
+        if (departamentoId !== '') {
+            data = yield empleados_1.empleados.findAll({
+                include: [departamentos_1.departamentos, empresas_1.empresas],
+                where: {
+                    where: { empresaId, departamentoId },
+                    [sequelize_1.Op.or]: [
+                        {
+                            numero_empleado: {
+                                [sequelize_1.Op.like]: `%${termino}%`,
+                            },
+                        },
+                        {
+                            nombre: {
+                                [sequelize_1.Op.like]: `%${termino}%`,
+                            },
+                        },
+                    ],
+                },
+            });
+        }
         data = yield empleados_1.empleados.findAll({
             include: [departamentos_1.departamentos, empresas_1.empresas],
             where: {
@@ -212,12 +242,12 @@ const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, vo
                 [sequelize_1.Op.or]: [
                     {
                         numero_empleado: {
-                            [sequelize_1.Op.like]: `%${busqueda}%`,
+                            [sequelize_1.Op.like]: `%${termino}%`,
                         },
                     },
                     {
                         nombre: {
-                            [sequelize_1.Op.like]: `%${busqueda}%`,
+                            [sequelize_1.Op.like]: `%${termino}%`,
                         },
                     },
                 ],
@@ -225,7 +255,7 @@ const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, vo
         });
         return resp.status(200).json({
             ok: true,
-            busqueda,
+            busqueda: termino,
             departamentos: data,
         });
     }

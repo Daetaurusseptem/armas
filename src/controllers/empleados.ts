@@ -101,12 +101,9 @@ export const  getEmpleadoDepartamento = async(req:Request, resp:Response) => {
 }
 
 export const getEmpleado = async (req: Request, resp: Response) => {
-  const { idEmpleado } = req.params;
+  const { empleadoId } = req.params;
   try {
-    const empleado = await empleados.findOne({
-      include: [empresas, departamentos],
-      where: { id: idEmpleado },
-    });
+    const empleado = await empleados.findByPk(empleadoId,{include:[empresas, departamentos]});
     if (!empleado) {
       resp.status(404).json({
         ok: false,
@@ -115,7 +112,7 @@ export const getEmpleado = async (req: Request, resp: Response) => {
     }
     return resp.status(200).json({
       ok: true,
-      empleados: empleado,
+      empleado: empleado,
     });
   } catch (error) {
     return resp.status(500).json({
@@ -157,21 +154,34 @@ export const createEmpleado = async (req: Request, resp: Response) => {
   }
 };
 export const updateEmpleado = async (req: Request, resp: Response) => {
-  const { empleadoId } = req.params;
+  const { idEmpleado } = req.params;
 
-  const empleadoExiste = await empleados.findByPk(empleadoId);
 
+  try {
+    const empleadoExiste = await empleados.findByPk(idEmpleado);
+  
   if (!empleadoExiste) {
     return resp.status(400).json({
       ok: false,
       msg: "Este empleado no existe",
     });
   }
-
-  const updateEmpleado = await empleados.update(
-    { where: { id: empleadoId } },
-    req.body
-  );
+  
+  
+  const updateEmpleado = await empleados.update(req.body, {where:{id:idEmpleado}});
+  return resp.status(200).json({
+    ok: true,
+    msg: "Empleado Actualizado",
+  });
+  } catch (error) {
+    return resp.status(500).json({
+      ok: false,
+      msg: "Hubo un error inesperado"+error
+    });
+  }
+  
+  
+   
 };
 export const darDeBajaAlta = async (req: Request, resp: Response) => {
   try {
@@ -207,10 +217,31 @@ export const busquedaEmpleadoDepartamento = async (
   resp: Response
 ) => {
   try {
-    const { busqueda, empresaId, departamentoId} = req.params;
-
-
+    const { empresaId, termino} = req.params;
+    const {departamentoId} = req.query
     let data: any[] = [];
+    
+    if(departamentoId!==''){
+      data = await empleados.findAll({
+        include: [departamentos, empresas],
+        where: {
+          where: { empresaId, departamentoId },
+          [Op.or]: [
+          
+            {
+              numero_empleado: {
+                [Op.like]: `%${termino}%`,
+              },
+            },
+            {
+              nombre: {
+                [Op.like]: `%${termino}%`,
+              },
+            },
+          ],
+        },
+      });
+    }
 
     data = await empleados.findAll({
       include: [departamentos, empresas],
@@ -220,21 +251,25 @@ export const busquedaEmpleadoDepartamento = async (
         
           {
             numero_empleado: {
-              [Op.like]: `%${busqueda}%`,
+              [Op.like]: `%${termino}%`,
             },
           },
           {
             nombre: {
-              [Op.like]: `%${busqueda}%`,
+              [Op.like]: `%${termino}%`,
             },
           },
         ],
       },
     });
 
+
+
+   
+
     return resp.status(200).json({
       ok: true,
-      busqueda,
+      busqueda:termino,
       departamentos: data,
     });
   } catch (error) {
