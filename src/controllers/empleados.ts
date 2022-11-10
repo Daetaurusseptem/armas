@@ -8,10 +8,10 @@ import { areas } from "../models/areas";
 import { departamentos } from "../models/departamentos";
 import { and, Op } from "sequelize";
 
-//*GET - Obtener todos los empleados
+//*GET - Obtener todos los empleados de todas las empresas
 export const getEmpleados = async (req: Request, resp: Response) => {
   try {
-    const listaEmpleados = await empleados.findAll({ include: [empresas, departamentos],  });
+    const listaEmpleados = await empleados.findAll({ include: [empresas, departamentos], });
     return resp.status(200).json({
       ok: true,
       empleados: listaEmpleados,
@@ -23,7 +23,7 @@ export const getEmpleados = async (req: Request, resp: Response) => {
     });
   }
 };
-//*GET - Obtener empleados de una empresa
+//*GET - Obtener empleados de una empresa - params empresaId
 export const getEmpleadosEmpresa = async (
   req: Request,
   resp: Response
@@ -47,7 +47,7 @@ export const getEmpleadosEmpresa = async (
     });
   }
 };
-//*Obtener empleados por deparrtamento -params: departamento id
+//*GET - Obtener empleados por deparrtamento -params: empleadoId
 export const getEmpleadosDepartamento = async (
   req: Request,
   resp: Response
@@ -71,39 +71,108 @@ export const getEmpleadosDepartamento = async (
     });
   }
 };
-//GET - Obtener empleado por empresa
-export const  getEmpleadoDepartamento = async(req:Request, resp:Response) => {
+//*GET - Buscar empleados con termino - campos tabla busqueda: numeroEmpleado, nombre  - params: idEmpleado
+export const busquedaEmpleadoDepartamento = async (
+  req: Request,
+  resp: Response
+) => {
+  try {
+    const { empresaId, termino } = req.params;
+    const { departamentoId } = req.query
+    let data: any[] = [];
 
-    try {
-        console.log('sissssasa');
-    const {numeroEmpleado, empresaId} = req.params
+    if (departamentoId !== '') {
+      data = await empleados.findAll({
+        include: [departamentos, empresas],
+        where: {
+          where: { 
+            empresaId,
+            departamentoId 
+          },
+          [Op.or]: [
 
-    const empleadoDepartamento = await empleados.findOne({where:{empresaId, numero_empleado:numeroEmpleado}})
+            {
+              numero_empleado: {
+                [Op.like]: `%${termino}%`,
+              },
+            },
+            {
+              nombre: {
+                [Op.like]: `%${termino}%`,
+              },
+            },
+          ],
+        },
+      });
+    }
 
-    if(!empleadoDepartamento){
-        return resp.status(200).json({
-            ok:false,
-            msg:'empleado no existe'
-        })
+    data = await empleados.findAll({
+      include: [departamentos, empresas],
+      where: {
+        where: { empresaId },
+        [Op.or]: [
+
+          {
+            numero_empleado: {
+              [Op.like]: `%${termino}%`,
+            },
+          },
+          {
+            nombre: {
+              [Op.like]: `%${termino}%`,
+            },
+          },
+        ],
+      },
+    });
+
+    return resp.status(200).json({
+      ok: true,
+      busqueda: termino,
+      departamentos: data,
+    });
+  } catch (error) {
+    console.log(error);
+    return resp.status(500).json({
+      ok: false,
+      msg: "Busqueda invalida" + error,
+    });
+  }
+
+};
+//*GET - Obtener empleado por empresa - params: empresaId
+export const getEmpleadoDepartamento = async (req: Request, resp: Response) => {
+
+  try {
+    console.log('sissssasa');
+    const { numeroEmpleado, empresaId } = req.params
+
+    const empleadoDepartamento = await empleados.findOne({ where: { empresaId, numero_empleado: numeroEmpleado } })
+
+    if (!empleadoDepartamento) {
+      return resp.status(200).json({
+        ok: false,
+        msg: 'empleado no existe'
+      })
     }
 
     return resp.status(200).json({
-        ok:true,
-        empleado:empleadoDepartamento
+      ok: true,
+      empleado: empleadoDepartamento
     })
 
-    } catch (error) {
-        return resp.status(500).json({
-            ok:true,
-            msg:error
-        })
-    }
+  } catch (error) {
+    return resp.status(500).json({
+      ok: true,
+      msg: error
+    })
+  }
 }
-
+//*GET - Obtener empleado por Id - params: empleadoId
 export const getEmpleado = async (req: Request, resp: Response) => {
   const { empleadoId } = req.params;
   try {
-    const empleado = await empleados.findByPk(empleadoId,{include:[empresas, departamentos]});
+    const empleado = await empleados.findByPk(empleadoId, { include: [empresas, departamentos] });
     if (!empleado) {
       resp.status(404).json({
         ok: false,
@@ -121,12 +190,13 @@ export const getEmpleado = async (req: Request, resp: Response) => {
     });
   }
 };
+//*POST - Crear Empleado 
 export const createEmpleado = async (req: Request, resp: Response) => {
-  const {numero_empleado, empresaId} = req.body;
+  const { numero_empleado, empresaId } = req.body;
 
   try {
     //Se busca si el empleado existe
-    const empleadoExiste = await empleados.findOne({where:{numero_empleado, empresaId }});
+    const empleadoExiste = await empleados.findOne({ where: { numero_empleado, empresaId } });
     if (empleadoExiste) {
       return resp.status(400).json({
         ok: false,
@@ -135,7 +205,7 @@ export const createEmpleado = async (req: Request, resp: Response) => {
     }
     console.log(req.body.numero_empleado, req.body.empresaId);
     //validacion empresa
-    
+
     req.body.id = shortid.generate();
     console.log(req.body);
     //Si no existe se crea el empleado
@@ -153,36 +223,38 @@ export const createEmpleado = async (req: Request, resp: Response) => {
     });
   }
 };
+//*PUT - Actualizar Empleado - params: idEmpleado
 export const updateEmpleado = async (req: Request, resp: Response) => {
   const { idEmpleado } = req.params;
 
 
   try {
     const empleadoExiste = await empleados.findByPk(idEmpleado);
-  
-  if (!empleadoExiste) {
-    return resp.status(400).json({
-      ok: false,
-      msg: "Este empleado no existe",
+
+    if (!empleadoExiste) {
+      return resp.status(400).json({
+        ok: false,
+        msg: "Este empleado no existe",
+      });
+    }
+
+
+    const updateEmpleado = await empleados.update(req.body, { where: { id: idEmpleado } });
+    return resp.status(200).json({
+      ok: true,
+      msg: "Empleado Actualizado",
     });
-  }
-  
-  
-  const updateEmpleado = await empleados.update(req.body, {where:{id:idEmpleado}});
-  return resp.status(200).json({
-    ok: true,
-    msg: "Empleado Actualizado",
-  });
   } catch (error) {
     return resp.status(500).json({
       ok: false,
-      msg: "Hubo un error inesperado"+error
+      msg: "Hubo un error inesperado" + error
     });
   }
-  
-  
-   
+
+
+
 };
+//*PUT - Switch Estatus Empleado - params: idEmpleado
 export const darDeBajaAlta = async (req: Request, resp: Response) => {
   try {
     const { idEmpleado } = req.params;
@@ -212,72 +284,4 @@ export const darDeBajaAlta = async (req: Request, resp: Response) => {
     });
   }
 };
-export const busquedaEmpleadoDepartamento = async (
-  req: Request,
-  resp: Response
-) => {
-  try {
-    const { empresaId, termino} = req.params;
-    const {departamentoId} = req.query
-    let data: any[] = [];
-    
-    if(departamentoId!==''){
-      data = await empleados.findAll({
-        include: [departamentos, empresas],
-        where: {
-          where: { empresaId, departamentoId },
-          [Op.or]: [
-          
-            {
-              numero_empleado: {
-                [Op.like]: `%${termino}%`,
-              },
-            },
-            {
-              nombre: {
-                [Op.like]: `%${termino}%`,
-              },
-            },
-          ],
-        },
-      });
-    }
 
-    data = await empleados.findAll({
-      include: [departamentos, empresas],
-      where: {
-        where: { empresaId },
-        [Op.or]: [
-        
-          {
-            numero_empleado: {
-              [Op.like]: `%${termino}%`,
-            },
-          },
-          {
-            nombre: {
-              [Op.like]: `%${termino}%`,
-            },
-          },
-        ],
-      },
-    });
-
-
-
-   
-
-    return resp.status(200).json({
-      ok: true,
-      busqueda:termino,
-      departamentos: data,
-    });
-  } catch (error) {
-    console.log(error);
-    return resp.status(500).json({
-      ok: false,
-      msg: "Busqueda invalida" + error,
-    });
-  }
-
-};

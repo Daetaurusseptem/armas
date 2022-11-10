@@ -24,7 +24,6 @@ export const getAreasEmpresa = async(req:Request, resp:Response) =>{
             return resp.status(404).json({
                 ok:true,
                 msg:"No se encontraron areas"
-
             })
         }
 
