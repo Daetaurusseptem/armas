@@ -2,11 +2,13 @@ import { Request, Response } from "express";
 import { Empleado } from "../interfaces/pures/empleado.interface";
 import { empleados } from "../models/empleados";
 import { empresas } from "../models/empresas";
+import Sequelize from 'sequelize';
 
 import shortid from "shortid";
 import { areas } from "../models/areas";
 import { departamentos } from "../models/departamentos";
-import { and, Op } from "sequelize";
+
+const Op = Sequelize.Op
 
 //*GET - Obtener todos los empleados de todas las empresas
 export const getEmpleados = async (req: Request, resp: Response) => {
@@ -72,64 +74,72 @@ export const getEmpleadosDepartamento = async (
   }
 };
 //*GET - Buscar empleados con termino - campos tabla busqueda: numeroEmpleado, nombre  - params: idEmpleado
-export const busquedaEmpleadoDepartamento = async (
+export const busquedaEmpleadoEDepartamento = async (
   req: Request,
   resp: Response
 ) => {
+  const { empresaId, busqueda } = req.params;
+  
+  const { departamentoId } = req.query
+  
   try {
-    const { empresaId, termino } = req.params;
-    const { departamentoId } = req.query
     let data: any[] = [];
-
-    if (departamentoId !== '') {
+    console.log(empresaId);
+    if (departamentoId !== undefined) {
+      // return resp.status(200).json({
+      //   ok:false,
+      //   msg:"No departamento"
+      // })
       data = await empleados.findAll({
         include: [departamentos, empresas],
         where: {
-          where: { 
-            empresaId,
-            departamentoId 
-          },
+          
+            departamentoId,
+            empresaId
+          
+          ,
           [Op.or]: [
 
             {
               numero_empleado: {
-                [Op.like]: `%${termino}%`,
+                [Op.like]: `%${busqueda}%`,
               },
             },
             {
               nombre: {
-                [Op.like]: `%${termino}%`,
+                [Op.like]: `%${busqueda}%`,
               },
             },
           ],
         },
       });
     }
-
     data = await empleados.findAll({
       include: [departamentos, empresas],
       where: {
-        where: { empresaId },
+        [Op.and]:{
+          empresaId
+        ,
         [Op.or]: [
 
           {
             numero_empleado: {
-              [Op.like]: `%${termino}%`,
+              [Op.like]: `%${busqueda}%`,
             },
           },
           {
             nombre: {
-              [Op.like]: `%${termino}%`,
+              [Op.like]: `%${busqueda}%`,
             },
-          },
-        ],
-      },
+          }
+        ]}
+      }
     });
 
     return resp.status(200).json({
       ok: true,
-      busqueda: termino,
-      departamentos: data,
+      busqueda,
+      empleados: data,
     });
   } catch (error) {
     console.log(error);

@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.busquedaEmpleadoDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
+exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.busquedaEmpleadoEDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
 const empleados_1 = require("../models/empleados");
 const empresas_1 = require("../models/empresas");
+const sequelize_1 = __importDefault(require("sequelize"));
 const shortid_1 = __importDefault(require("shortid"));
 const departamentos_1 = require("../models/departamentos");
-const sequelize_1 = require("sequelize");
+const Op = sequelize_1.default.Op;
 //*GET - Obtener todos los empleados de todas las empresas
 const getEmpleados = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -80,28 +81,31 @@ const getEmpleadosDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0
 });
 exports.getEmpleadosDepartamento = getEmpleadosDepartamento;
 //*GET - Buscar empleados con termino - campos tabla busqueda: numeroEmpleado, nombre  - params: idEmpleado
-const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+const busquedaEmpleadoEDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { empresaId, busqueda } = req.params;
+    const { departamentoId } = req.query;
     try {
-        const { empresaId, termino } = req.params;
-        const { departamentoId } = req.query;
         let data = [];
-        if (departamentoId !== '') {
+        console.log(empresaId);
+        if (departamentoId !== undefined) {
+            // return resp.status(200).json({
+            //   ok:false,
+            //   msg:"No departamento"
+            // })
             data = yield empleados_1.empleados.findAll({
                 include: [departamentos_1.departamentos, empresas_1.empresas],
                 where: {
-                    where: {
-                        empresaId,
-                        departamentoId
-                    },
-                    [sequelize_1.Op.or]: [
+                    departamentoId,
+                    empresaId,
+                    [Op.or]: [
                         {
                             numero_empleado: {
-                                [sequelize_1.Op.like]: `%${termino}%`,
+                                [Op.like]: `%${busqueda}%`,
                             },
                         },
                         {
                             nombre: {
-                                [sequelize_1.Op.like]: `%${termino}%`,
+                                [Op.like]: `%${busqueda}%`,
                             },
                         },
                     ],
@@ -111,25 +115,27 @@ const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, vo
         data = yield empleados_1.empleados.findAll({
             include: [departamentos_1.departamentos, empresas_1.empresas],
             where: {
-                where: { empresaId },
-                [sequelize_1.Op.or]: [
-                    {
-                        numero_empleado: {
-                            [sequelize_1.Op.like]: `%${termino}%`,
+                [Op.and]: {
+                    empresaId,
+                    [Op.or]: [
+                        {
+                            numero_empleado: {
+                                [Op.like]: `%${busqueda}%`,
+                            },
                         },
-                    },
-                    {
-                        nombre: {
-                            [sequelize_1.Op.like]: `%${termino}%`,
-                        },
-                    },
-                ],
-            },
+                        {
+                            nombre: {
+                                [Op.like]: `%${busqueda}%`,
+                            },
+                        }
+                    ]
+                }
+            }
         });
         return resp.status(200).json({
             ok: true,
-            busqueda: termino,
-            departamentos: data,
+            busqueda,
+            empleados: data,
         });
     }
     catch (error) {
@@ -140,7 +146,7 @@ const busquedaEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, vo
         });
     }
 });
-exports.busquedaEmpleadoDepartamento = busquedaEmpleadoDepartamento;
+exports.busquedaEmpleadoEDepartamento = busquedaEmpleadoEDepartamento;
 //*GET - Obtener empleado por empresa - params: empresaId
 const getEmpleadoDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
