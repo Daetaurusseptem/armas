@@ -82,60 +82,55 @@ const getEmpleadosDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0
 exports.getEmpleadosDepartamento = getEmpleadosDepartamento;
 //*GET - Buscar empleados con termino - campos tabla busqueda: numeroEmpleado, nombre  - params: idEmpleado
 const busquedaEmpleadoEDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { empresaId, busqueda } = req.params;
-    const { departamentoId } = req.query;
+    const { empresaId } = req.params;
+    const { departamentoId, busqueda } = req.query;
     try {
         let data = [];
         console.log(empresaId);
-        if (departamentoId !== undefined) {
-            // return resp.status(200).json({
-            //   ok:false,
-            //   msg:"No departamento"
-            // })
+        //*Si departamentoId y busqueda
+        if (departamentoId !== undefined && busqueda !== undefined) {
+            console.log('si dep ' + departamentoId, busqueda);
             data = yield empleados_1.empleados.findAll({
                 include: [departamentos_1.departamentos, empresas_1.empresas],
                 where: {
-                    departamentoId,
-                    empresaId,
+                    [Op.and]: [
+                        { empresaId }, { departamentoId }
+                    ],
                     [Op.or]: [
-                        {
-                            numero_empleado: {
-                                [Op.like]: `%${busqueda}%`,
-                            },
-                        },
+                        { numero_empleado: { [Op.like]: `%${busqueda}%` } },
                         {
                             nombre: {
                                 [Op.like]: `%${busqueda}%`,
                             },
                         },
-                    ],
+                    ]
                 },
             });
         }
-        data = yield empleados_1.empleados.findAll({
-            include: [departamentos_1.departamentos, empresas_1.empresas],
-            where: {
-                [Op.and]: {
+        else if (departamentoId == undefined && busqueda !== undefined) {
+            console.log('ej ejta');
+            data = yield empleados_1.empleados.findAll({
+                include: [departamentos_1.departamentos, empresas_1.empresas],
+                where: {
                     empresaId,
                     [Op.or]: [
-                        {
-                            numero_empleado: {
-                                [Op.like]: `%${busqueda}%`,
-                            },
-                        },
-                        {
-                            nombre: {
-                                [Op.like]: `%${busqueda}%`,
-                            },
-                        }
+                        { numero_empleado: { [Op.like]: `%${busqueda}%` } },
+                        { nombre: { [Op.like]: `%${busqueda}%` }, }
                     ]
                 }
-            }
-        });
+            });
+        }
+        else if (departamentoId !== undefined) {
+            data = yield empleados_1.empleados.findAll({
+                include: [departamentos_1.departamentos, empresas_1.empresas],
+                where: { departamentoId, empresaId }
+            });
+        }
         return resp.status(200).json({
             ok: true,
             busqueda,
-            empleados: data,
+            departamentoId,
+            empleados: data
         });
     }
     catch (error) {
