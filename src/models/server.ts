@@ -1,4 +1,5 @@
 import express, { Application } from 'express'
+import expressFileUpload from 'express-fileupload';
 import sequelize from '../db/db';
 import routesEmpleados from '../routes/empleados.routes';
 import routesEmpresas from '../routes/empresas.routes';
@@ -8,8 +9,11 @@ import routesPermisos from '../routes/permisos.routes';
 import routesAuth from '../routes/auth.routes';
 import routesDepartamentos from '../routes/departamentos.routes';
 import routesBusqueda from '../routes/busqueda.routes';
+import routesUploads from '../routes/uploads.routes';
 import shortId from 'shortid';
+
 const cors = require('cors')
+const path = require('path');
 
 export class Server{
     private app : Application;
@@ -19,8 +23,10 @@ export class Server{
         this.port= process.env.PORT || "3000";
         this.dbConnect().catch(err=>console.log(err) ) ;
         this.listen();
+        this.app.use(expressFileUpload());
         this.middlewares();
         this.routes();
+        this.app.use(express.static('public'));
     }
 
     listen(){
@@ -35,10 +41,13 @@ export class Server{
         this.app.use('/api/permisos', routesPermisos );
         this.app.use('/api/auth', routesAuth );
         this.app.use('/api/busqueda', routesBusqueda );
+        this.app.use('/api/uploads', routesUploads );
     }
     middlewares(){
         this.app.use(express.json());
         this.app.use(cors());
+        
+        
     }
     async dbConnect(){ 
         try { 

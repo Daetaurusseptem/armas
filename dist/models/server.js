@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
+const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const empleados_routes_1 = __importDefault(require("../routes/empleados.routes"));
 const empresas_routes_1 = __importDefault(require("../routes/empresas.routes"));
 const usuarios_routes_1 = __importDefault(require("../routes/usuarios.routes"));
@@ -22,15 +23,19 @@ const permisos_routes_1 = __importDefault(require("../routes/permisos.routes"));
 const auth_routes_1 = __importDefault(require("../routes/auth.routes"));
 const departamentos_routes_1 = __importDefault(require("../routes/departamentos.routes"));
 const busqueda_routes_1 = __importDefault(require("../routes/busqueda.routes"));
+const uploads_routes_1 = __importDefault(require("../routes/uploads.routes"));
 const cors = require('cors');
+const path = require('path');
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || "3000";
         this.dbConnect().catch(err => console.log(err));
         this.listen();
+        this.app.use((0, express_fileupload_1.default)());
         this.middlewares();
         this.routes();
+        this.app.use(express_1.default.static('public'));
     }
     listen() {
         this.app.listen(process.env.PORT, () => { console.log(`Listening in port ${this.port}`); });
@@ -44,6 +49,7 @@ class Server {
         this.app.use('/api/permisos', permisos_routes_1.default);
         this.app.use('/api/auth', auth_routes_1.default);
         this.app.use('/api/busqueda', busqueda_routes_1.default);
+        this.app.use('/api/uploads', uploads_routes_1.default);
     }
     middlewares() {
         this.app.use(express_1.default.json());

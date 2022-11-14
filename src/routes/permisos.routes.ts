@@ -1,4 +1,5 @@
 import {Router} from 'express';
+console.log('cargada permisos');
 import {agregarEliminarPermiso} from '../controllers/permisos';
 
 import {getEmpleados, createEmpleado, darDeBajaAlta} from '../controllers/empleados';
