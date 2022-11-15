@@ -13,6 +13,10 @@ export const expedientes = sequelize.define('Expedientes', {
         type:DataTypes.STRING(50),
         allowNull:false
     },
+    nombre:{
+        type:DataTypes.STRING(50),
+        allowNull:false
+    },
     actualizo: {
         type: DataTypes.STRING(8),
         allowNull:false,

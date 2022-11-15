@@ -15,6 +15,10 @@ exports.expedientes = db_1.default.define('Expedientes', {
         type: sequelize_1.DataTypes.STRING(50),
         allowNull: false
     },
+    nombre: {
+        type: sequelize_1.DataTypes.STRING(50),
+        allowNull: false
+    },
     actualizo: {
         type: sequelize_1.DataTypes.STRING(8),
         allowNull: false,
