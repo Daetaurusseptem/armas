@@ -1,3 +1,5 @@
+import shortId from'shortid'
+
 import path from 'path';
 import fs from 'fs';
 
@@ -6,12 +8,14 @@ import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import {Request, Response} from 'express';
 import { empresas } from '../models/empresas';
+import { UploadedFile } from 'express-fileupload';
+import { expedientes } from '../models/expedientes';
 
 
 
-export const fileUpload = async( req:Request, resp:Response ) => {
-    const {empresaId, areaId, empleadoId} = req.params;
-    const {nombre}   = req.body;
+export const subirArchivo = async( req:Request, resp:Response ) => {
+    const {empresaId, areaId, empleadoId, departamentoId} = req.params;
+    const {nombre, nota, actualizo,tipo_expediente }   = req.body;
     let empresasValidas:any[] = []
     
     // Validar tipo
@@ -35,11 +39,11 @@ export const fileUpload = async( req:Request, resp:Response ) => {
         });
     }
 
-    const file = req.files.archivo;
+    const file = req.files.archivo as UploadedFile
     
     
-
-    const nombreCortado = file.name.split('.'); // wolverine.1.3.jpg
+    
+    const nombreCortado = file.name.split('.');
     const extensionArchivo = nombreCortado[ nombreCortado.length - 1 ];
 
     const extensionesValidas = ['png','jpg','jpeg','xls','xlsx', 'pdf','doc','docx'];
@@ -49,16 +53,70 @@ export const fileUpload = async( req:Request, resp:Response ) => {
             msg: 'No es una extensión permitida'
         });
     }
+    const nombreArchivo = `${nombreCortado[0]}.${extensionArchivo}`;
+     //img path
+    let path = `C:/expedientes/${empresaId}/${areaId}/${departamentoId}/${empleadoId}/${nombreArchivo}`;
+    
+    file.name=nombreArchivo;
+
+    file.mv(path, (err)=>{
+        if(err){
+            console.log(err);
+           return resp.status(500).json({
+               ok: false,
+               msg: 'Ocurrio un error inesperado'
+           });
+        }
+    })
+
+    path = `${empresaId}/${areaId}/${departamentoId}/${empleadoId}/${nombreArchivo}`;
+
+    const expediente = {
+        id: shortId.generate(),
+        nota,
+        actualizo,
+        path,
+        areaId,
+        empresaId,
+        empleadoId,
+        tipo_expediente
+    }
+
+    const crearExpediente = await expedientes.create(expediente)
+
+    crearExpediente.save();
+
+
+ 
+ 
+    
 
   return resp.status(200).json({
     ok:true, 
     empresasValidas,
     nombreCortado,
-    extensionArchivo
+    extensionArchivo,
+    path,
+    expediente:crearExpediente
     
   })
 
     
 }
 
+exports.getArchivo = (req:Request, resp:Response) =>{
+
+    const {pathImg} = req.params
+
+    
+
+    //img por defecto
+    if(fs.existsSync(pathImg)) {
+        return resp.sendFile(pathImg)
+    }else{
+        return resp.status(200).json({
+             
+        })
+    }
+}
 

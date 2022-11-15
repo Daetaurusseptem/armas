@@ -19,6 +19,7 @@ empleados.belongsTo(departamentos, {constraints:true, foreignKey:{name:'departam
 areas.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId', allowNull:false}}) 
 
 tipo_expedientes.belongsTo(areas, {constraints:true, foreignKey:{name:'areaId', allowNull:false}})
+expedientes.belongsTo(empleados, {constraints:true, foreignKey:{name:'empleadoId', allowNull:false}})
 expedientes.belongsTo(areas, {constraints:true, foreignKey:{name:'areaId', allowNull:false}})
 expedientes.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId', allowNull:false}})
 expedientes.belongsTo(tipo_expedientes, {constraints:true, foreignKey:{name:'tipo_expediente', allowNull:false}})

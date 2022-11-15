@@ -10,6 +10,7 @@ import routesAuth from '../routes/auth.routes';
 import routesDepartamentos from '../routes/departamentos.routes';
 import routesBusqueda from '../routes/busqueda.routes';
 import routesUploads from '../routes/uploads.routes';
+import routesExpedientes from '../routes/expedientes.routes';
 import shortId from 'shortid';
 
 const cors = require('cors')
@@ -23,7 +24,7 @@ export class Server{
         this.port= process.env.PORT || "3000";
         this.dbConnect().catch(err=>console.log(err) ) ;
         this.listen();
-        this.app.use(expressFileUpload());
+        this.app.use(expressFileUpload({createParentPath:true}));
         this.middlewares();
         this.routes();
         this.app.use(express.static('public'));
@@ -42,6 +43,7 @@ export class Server{
         this.app.use('/api/auth', routesAuth );
         this.app.use('/api/busqueda', routesBusqueda );
         this.app.use('/api/uploads', routesUploads );
+        this.app.use('/api/expedientes', routesExpedientes );
     }
     middlewares(){
         this.app.use(express.json());

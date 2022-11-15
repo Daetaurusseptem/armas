@@ -1,3 +1,4 @@
+import { expedientes } from './../models/expedientes';
 import { Request, Response } from "express";
 import { Empleado } from "../interfaces/pures/empleado.interface";
 import { empleados } from "../models/empleados";
@@ -44,7 +45,7 @@ export const getEmpleadosEmpresa = async (
     });
   } catch (error) {
     return resp.status(500).json({
-      ok: true,
+      ok: true, 
       msg: "Hubo un error: " + error,
     });
   }
