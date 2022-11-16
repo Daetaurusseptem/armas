@@ -7,7 +7,7 @@ import {
 export const tipo_expedientes = sequelize.define('Tipo_Expedientes', {
    id_tipo:{
     primaryKey:true,
-    type:DataTypes.STRING(8),
+    type:DataTypes.STRING(9),
     allowNull:false
     },
     tipo:{

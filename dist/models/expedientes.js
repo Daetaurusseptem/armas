@@ -20,7 +20,7 @@ exports.expedientes = db_1.default.define('Expedientes', {
         allowNull: false
     },
     actualizo: {
-        type: sequelize_1.DataTypes.STRING(8),
+        type: sequelize_1.DataTypes.STRING(50),
         allowNull: false,
     },
     path: {

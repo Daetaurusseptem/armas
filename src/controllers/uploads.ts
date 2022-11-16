@@ -107,7 +107,7 @@ export const subirArchivo = async (req: Request, resp: Response) => {
         })
     }
 
-
+ 
 }
 
 exports.getArchivo = (req: Request, resp: Response) => {

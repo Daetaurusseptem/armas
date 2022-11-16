@@ -8,12 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTiposExpedientes = exports.getExpedienteEmpleado = void 0;
+exports.crearTipoExpedienteArea = exports.getTiposExpedientesArea = exports.getExpedienteEmpleado = void 0;
 const expedientes_1 = require("./../models/expedientes");
 const empresas_1 = require("../models/empresas");
 const areas_1 = require("../models/areas");
 const tipo_expediente_1 = require("../models/tipo_expediente");
+const shortid_1 = __importDefault(require("shortid"));
 const getExpedienteEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { empleadoId, areaId, empresaId } = req.params;
     try {
@@ -37,7 +41,7 @@ const getExpedienteEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.getExpedienteEmpleado = getExpedienteEmpleado;
-const getTiposExpedientes = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+const getTiposExpedientesArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { empresaId, areaId } = req.params;
         const empresa = yield empresas_1.empresas.findByPk(empresaId);
@@ -64,10 +68,8 @@ const getTiposExpedientes = (req, resp) => __awaiter(void 0, void 0, void 0, fun
                 console.log(tipo);
                 return tipo;
             }
-            else {
-                return;
-            }
         });
+        console.log(tipos);
         return resp.status(200).json({
             ok: true,
             tiposExpediente: tipos
@@ -80,4 +82,33 @@ const getTiposExpedientes = (req, resp) => __awaiter(void 0, void 0, void 0, fun
         });
     }
 });
-exports.getTiposExpedientes = getTiposExpedientes;
+exports.getTiposExpedientesArea = getTiposExpedientesArea;
+const crearTipoExpedienteArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { tipo, descripcion, actualizo } = req.body;
+        const id_tipo = shortid_1.default.generate();
+        const { empresaId, areaId } = req.params;
+        const empresa = yield empresas_1.empresas.findByPk(empresaId);
+        if (!empresa) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'Empresa no existe'
+            });
+        }
+        const crearTipoExpedienteAreaBD = yield tipo_expediente_1.tipo_expedientes.create({
+            tipo, descripcion, actualizo, areaId, id_tipo
+        });
+        crearTipoExpedienteAreaBD.save();
+        return resp.status(200).json({
+            ok: true,
+            msg: 'Tipo expediente creado satisfactoriamente'
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: true,
+            msg: 'Error inesperado' + error
+        });
+    }
+});
+exports.crearTipoExpedienteArea = crearTipoExpedienteArea;
