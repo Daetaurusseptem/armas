@@ -60,7 +60,7 @@ export const subirArchivo = async (req: Request, resp: Response) => {
         let path = `C:/expedientes/${empresaId}/${areaId}/${departamentoId}/${empleadoId}/${nombreArchivo}`;
     
         file.name = nombreArchivo;
-    
+     
         file.mv(path, (err) => {
             if (err) {
                 console.log(err);

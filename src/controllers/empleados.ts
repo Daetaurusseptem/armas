@@ -35,7 +35,7 @@ export const getEmpleadosEmpresa = async (
     const { empresaId } = req.params;
     console.log("id empresa: ", empresaId);
     const listaEmpleados = await empleados.findAll({
-      include: [empresas, departamentos],
+      include: [empresas, departamentos,expedientes],
       where: { empresaId }
     });
 

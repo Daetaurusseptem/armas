@@ -12,6 +12,8 @@ const usuarios_1 = require("../models/usuarios");
 empleados_1.empleados.belongsTo(empresas_1.empresas, { constraints: true, foreignKey: { name: 'empresaId', allowNull: false } });
 //Campo empresaId en tabla empleados
 empleados_1.empleados.belongsTo(departamentos_1.departamentos, { constraints: true, foreignKey: { name: 'departamentoId', allowNull: false } });
+//!QUITA
+empleados_1.empleados.hasMany(expedientes_1.expedientes);
 areas_1.areas.belongsTo(empresas_1.empresas, { constraints: true, foreignKey: { name: 'empresaId', allowNull: false } });
 tipo_expediente_1.tipo_expedientes.belongsTo(areas_1.areas, { constraints: true, foreignKey: { name: 'areaId', allowNull: false } });
 expedientes_1.expedientes.belongsTo(empleados_1.empleados, { constraints: true, foreignKey: { name: 'empleadoId', allowNull: false } });

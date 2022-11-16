@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.busquedaEmpleadoEDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
+const expedientes_1 = require("./../models/expedientes");
 const empleados_1 = require("../models/empleados");
 const empresas_1 = require("../models/empresas");
 const sequelize_1 = __importDefault(require("sequelize"));
@@ -42,7 +43,7 @@ const getEmpleadosEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, fun
         const { empresaId } = req.params;
         console.log("id empresa: ", empresaId);
         const listaEmpleados = yield empleados_1.empleados.findAll({
-            include: [empresas_1.empresas, departamentos_1.departamentos],
+            include: [empresas_1.empresas, departamentos_1.departamentos, expedientes_1.expedientes],
             where: { empresaId }
         });
         return resp.json({
