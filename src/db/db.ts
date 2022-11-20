@@ -4,7 +4,7 @@ import { empresas } from '../models/empresas';
 
 
 const sequelize = new Sequelize('prueba','jaime','123',
-{
+{ 
     host:'localhost',
     dialect:'mssql',
     port: 49674
