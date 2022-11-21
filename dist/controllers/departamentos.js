@@ -108,14 +108,27 @@ const createDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, fun
 exports.createDepartamentos = createDepartamentos;
 //* PUT - Actualizar departamento
 const updateDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { departamentoId } = req.params;
-    const empresaExiste = yield departamentos_1.departamentos.findByPk(departamentoId);
-    if (!empresaExiste) {
-        return resp.status(400).json({
+    console.log('sadasd');
+    try {
+        const { departamentoId } = req.params;
+        const empresaExiste = yield departamentos_1.departamentos.findByPk(departamentoId);
+        if (!empresaExiste) {
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Este departamento no existe'
+            });
+        }
+        const updateDepartamento = yield departamentos_1.departamentos.update(req.body, { where: { id: departamentoId } });
+        return resp.status(200).json({
             ok: false,
-            msg: 'Este empleado no existe'
+            msg: 'Departamento Actualizado'
         });
     }
-    const updateDepartamento = yield departamentos_1.departamentos.update({ where: { id: departamentoId } }, req.body);
+    catch (error) {
+        return resp.status(404).json({
+            ok: false,
+            msg: 'Error inesperado' + error
+        });
+    }
 });
 exports.updateDepartamento = updateDepartamento;

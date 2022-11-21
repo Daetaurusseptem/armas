@@ -112,19 +112,36 @@ export const createDepartamentos =async (req:Request, resp:Response) =>{
 }
 //* PUT - Actualizar departamento
 export const updateDepartamento= async (req:Request, resp:Response) => {
-    const {departamentoId}= req.params;
+    console.log('sadasd');
+    try {
+        const {departamentoId}= req.params;
 
-    const empresaExiste = await departamentos.findByPk(departamentoId);
+        const empresaExiste = await departamentos.findByPk(departamentoId);
+    
+        if(!empresaExiste){
+            return resp.status(400).json({
+                ok:false,
+                msg:'Este departamento no existe'
+            })
+        }
+    
+        const updateDepartamento = await departamentos.update(req.body,{where:{id:departamentoId}})    
 
-    if(!empresaExiste){
-        return resp.status(400).json({
+        return resp.status(200).json({
             ok:false,
-            msg:'Este empleado no existe'
+            msg:'Departamento Actualizado'
+        })
+
+        
+    } catch (error) {
+        return resp.status(404).json({
+            ok:false,
+            msg:'Error inesperado'+error
         })
     }
-
-    const updateDepartamento = await departamentos.update({where:{id:departamentoId}},req.body)
+    
     
 }
 
 
+ 
