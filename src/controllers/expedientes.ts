@@ -1,6 +1,6 @@
 import { expedientes } from './../models/expedientes';
 import {Request, Response} from 'express';
-import Sequelize from 'sequelize';
+import Sequelize, { where } from 'sequelize';
 import { empresas } from '../models/empresas';
 import { areas } from '../models/areas';
 import { tipo_expedientes } from '../models/tipo_expediente';
@@ -51,6 +51,12 @@ export const getTiposExpedientesArea = async(req:Request, resp:Response)=>{
             })
         }
 
+        const tipoExpArea = await tipo_expedientes.findAll({where:{areaId}})
+        return resp.status(200).json({
+            ok:true,
+            tiposExpediente:tipoExpArea
+        })
+
         const areasEmpresa = await areas.findAll({where:{empresaId}})
 
         const areasEmpresaArray = areasEmpresa.map((r:any)=>{
@@ -59,22 +65,33 @@ export const getTiposExpedientesArea = async(req:Request, resp:Response)=>{
 
         const tiposExpedientes = await tipo_expedientes.findAll()
         
-        const tipos = tiposExpedientes.map((tipo:any)=>{
+        const tipos:any = tiposExpedientes
+        .reduce((resultados:any[]|any, tipo:any)=>{
             if(areasEmpresaArray.includes(tipo.areaId)){
-                console.log(tipo);
-                return tipo
+                if(Array.isArray(resultados)){
+                    resultados.push(tipo)
+                }else{
+                    console.log(typeof resultados);
+                }
             }
+            
+            return resultados
         })
+        
+        const re:any[]=[]
+        re.push(tipos)
+        console.log(re);
 
-        console.log(tipos);
-    
         return resp.status(200).json({
             ok:true,
-            tiposExpediente:tipos
+            tiposExpediente:re
         })
-
-
+        
+        console.log('paso de acas');
+        
     } catch (error) {
+        console.log(error);
+
         return resp.status(400).json({
             ok:false,
             msg:error

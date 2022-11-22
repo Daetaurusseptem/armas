@@ -58,24 +58,39 @@ const getTiposExpedientesArea = (req, resp) => __awaiter(void 0, void 0, void 0,
                 msg: 'Area no existe'
             });
         }
+        const tipoExpArea = yield tipo_expediente_1.tipo_expedientes.findAll({ where: { areaId } });
+        return resp.status(200).json({
+            ok: true,
+            tiposExpediente: tipoExpArea
+        });
         const areasEmpresa = yield areas_1.areas.findAll({ where: { empresaId } });
         const areasEmpresaArray = areasEmpresa.map((r) => {
             return r.id;
         });
         const tiposExpedientes = yield tipo_expediente_1.tipo_expedientes.findAll();
-        const tipos = tiposExpedientes.map((tipo) => {
+        const tipos = tiposExpedientes
+            .reduce((resultados, tipo) => {
             if (areasEmpresaArray.includes(tipo.areaId)) {
-                console.log(tipo);
-                return tipo;
+                if (Array.isArray(resultados)) {
+                    resultados.push(tipo);
+                }
+                else {
+                    console.log(typeof resultados);
+                }
             }
+            return resultados;
         });
-        console.log(tipos);
+        const re = [];
+        re.push(tipos);
+        console.log(re);
         return resp.status(200).json({
             ok: true,
-            tiposExpediente: tipos
+            tiposExpediente: re
         });
+        console.log('paso de acas');
     }
     catch (error) {
+        console.log(error);
         return resp.status(400).json({
             ok: false,
             msg: error
