@@ -12,16 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.crearTipoExpedienteArea = exports.getTiposExpedientesArea = exports.getExpedienteEmpleado = void 0;
+exports.eliminarExpediente = exports.crearTipoExpedienteArea = exports.getTiposExpedientesArea = exports.getExpedienteEmpleado = void 0;
 const expedientes_1 = require("./../models/expedientes");
 const empresas_1 = require("../models/empresas");
 const areas_1 = require("../models/areas");
 const tipo_expediente_1 = require("../models/tipo_expediente");
 const shortid_1 = __importDefault(require("shortid"));
+const fs_1 = __importDefault(require("fs"));
 const getExpedienteEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { empleadoId, areaId, empresaId } = req.params;
     try {
-        const expedienteEmpleado = yield expedientes_1.expedientes.findAll({ where: { empleadoId, areaId, empresaId } });
+        const expedienteEmpleado = yield expedientes_1.expedientes.findAll({ where: { empleadoId, areaId, empresaId }, include: tipo_expediente_1.tipo_expedientes });
         if (!expedienteEmpleado) {
             resp.status(404).json({
                 ok: false,
@@ -127,3 +128,33 @@ const crearTipoExpedienteArea = (req, resp) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.crearTipoExpedienteArea = crearTipoExpedienteArea;
+const eliminarExpediente = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idExpediente } = req.params;
+        console.log(idExpediente);
+        const expedientDB = yield expedientes_1.expedientes.findByPk(idExpediente);
+        console.log(expedientDB);
+        const path = expedientDB.get('path');
+        const pathAbsoluto = `C:/expedientes/${path}`;
+        if (!expedientDB) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'No existe el expediente'
+            });
+        }
+        fs_1.default.unlinkSync(pathAbsoluto);
+        expedientDB.destroy();
+        return resp.status(200).json({
+            ok: true,
+            msg: 'Expediente eliminado',
+            pathAbsoluto
+        });
+    }
+    catch (error) {
+        resp.status(500).json({
+            ok: true,
+            msg: 'Error:' + error,
+        });
+    }
+});
+exports.eliminarExpediente = eliminarExpediente;

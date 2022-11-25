@@ -17,11 +17,20 @@ const shortid_1 = __importDefault(require("shortid"));
 const fs_1 = __importDefault(require("fs"));
 const empresas_1 = require("../models/empresas");
 const expedientes_1 = require("../models/expedientes");
+const empleados_1 = require("../models/empleados");
 const subirArchivo = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { empresaId, areaId, empleadoId, departamentoId } = req.params;
         const { nombre, nota, actualizo, tipo_expediente } = req.body;
         let empresasValidas = [];
+        const empleadoDB = yield empleados_1.empleados.findByPk(empleadoId);
+        if (!empleadoDB) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'Empleado no existe'
+            });
+        }
+        const empNum = empleadoDB.get('numero_empleado');
         // Validar tipo
         yield (yield empresas_1.empresas.findAll({ attributes: ['id'] })).forEach((r) => {
             empresasValidas.push(r.id);
@@ -52,7 +61,7 @@ const subirArchivo = (req, resp) => __awaiter(void 0, void 0, void 0, function* 
         }
         const nombreArchivo = `${nombreCortado[0]}.${extensionArchivo}`;
         //img path
-        let path = `C:/expedientes/${empresaId}/${areaId}/${departamentoId}/${empleadoId}/${nombreArchivo}`;
+        let path = `C:/expedientes/${empresaId}/${areaId}/${departamentoId}/${empNum}/${nombreArchivo}`;
         file.name = nombreArchivo;
         file.mv(path, (err) => {
             if (err) {
@@ -63,7 +72,7 @@ const subirArchivo = (req, resp) => __awaiter(void 0, void 0, void 0, function* 
                 });
             }
         });
-        path = `${empresaId}/${areaId}/${departamentoId}/${empleadoId}/${nombreArchivo}`;
+        path = `${empresaId}/${areaId}/${departamentoId}/${empNum}/${nombreArchivo}`;
         const expediente = {
             id: shortid_1.default.generate(),
             nombre: nombreArchivo,

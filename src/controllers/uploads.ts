@@ -10,6 +10,7 @@ import { Request, Response } from 'express';
 import { empresas } from '../models/empresas';
 import { UploadedFile } from 'express-fileupload';
 import { expedientes } from '../models/expedientes';
+import { empleados } from '../models/empleados';
 
 
 
@@ -19,7 +20,14 @@ export const subirArchivo = async (req: Request, resp: Response) => {
         const { empresaId, areaId, empleadoId, departamentoId } = req.params;
         const { nombre, nota, actualizo, tipo_expediente } = req.body;
         let empresasValidas: any[] = []
-    
+        const empleadoDB = await empleados.findByPk(empleadoId)
+        if(!empleadoDB){
+            return resp.status(404).json({
+                ok: false,
+                msg: 'Empleado no existe'
+            });
+        }
+        const empNum = empleadoDB.get('numero_empleado')
         // Validar tipo
         await (await empresas.findAll({ attributes: ['id'] })).forEach((r: any) => {
             empresasValidas.push(r.id)
@@ -57,7 +65,7 @@ export const subirArchivo = async (req: Request, resp: Response) => {
         }
         const nombreArchivo = `${nombreCortado[0]}.${extensionArchivo}`;
         //img path
-        let path = `C:/expedientes/${empresaId}/${areaId}/${departamentoId}/${empleadoId}/${nombreArchivo}`;
+        let path = `C:/expedientes/${empresaId}/${areaId}/${departamentoId}/${empNum}/${nombreArchivo}`;
     
         file.name = nombreArchivo;
      
@@ -71,7 +79,7 @@ export const subirArchivo = async (req: Request, resp: Response) => {
             }
         })
     
-        path = `${empresaId}/${areaId}/${departamentoId}/${empleadoId}/${nombreArchivo}`;
+        path = `${empresaId}/${areaId}/${departamentoId}/${empNum}/${nombreArchivo}`;
     
         const expediente = {
             id: shortId.generate(),
