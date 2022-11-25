@@ -91,7 +91,7 @@ export const busquedaEmpleadoEDepartamento = async (
     if (departamentoId !== undefined && busqueda!==undefined) {
       console.log('si dep '+departamentoId, busqueda);
       data = await empleados.findAll({
-        include: [departamentos, empresas],
+        include: [departamentos, empresas, expedientes],
         
         where: {
          [Op.and]:[
@@ -113,7 +113,7 @@ export const busquedaEmpleadoEDepartamento = async (
     else if(departamentoId==undefined && busqueda!==undefined){
       console.log('ej ejta');
       data = await empleados.findAll({
-        include: [departamentos, empresas],
+        include: [departamentos, empresas, expedientes],
         where: {
             empresaId
           ,
@@ -128,7 +128,7 @@ export const busquedaEmpleadoEDepartamento = async (
       data = await empleados.findAll(
         
         {
-          include: [departamentos, empresas],
+          include: [departamentos, empresas, expedientes],
           where:{departamentoId , empresaId}
         }
       )

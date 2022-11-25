@@ -92,7 +92,7 @@ const busquedaEmpleadoEDepartamento = (req, resp) => __awaiter(void 0, void 0, v
         if (departamentoId !== undefined && busqueda !== undefined) {
             console.log('si dep ' + departamentoId, busqueda);
             data = yield empleados_1.empleados.findAll({
-                include: [departamentos_1.departamentos, empresas_1.empresas],
+                include: [departamentos_1.departamentos, empresas_1.empresas, expedientes_1.expedientes],
                 where: {
                     [Op.and]: [
                         { empresaId }, { departamentoId }
@@ -111,7 +111,7 @@ const busquedaEmpleadoEDepartamento = (req, resp) => __awaiter(void 0, void 0, v
         else if (departamentoId == undefined && busqueda !== undefined) {
             console.log('ej ejta');
             data = yield empleados_1.empleados.findAll({
-                include: [departamentos_1.departamentos, empresas_1.empresas],
+                include: [departamentos_1.departamentos, empresas_1.empresas, expedientes_1.expedientes],
                 where: {
                     empresaId,
                     [Op.or]: [
@@ -123,7 +123,7 @@ const busquedaEmpleadoEDepartamento = (req, resp) => __awaiter(void 0, void 0, v
         }
         else if (departamentoId !== undefined) {
             data = yield empleados_1.empleados.findAll({
-                include: [departamentos_1.departamentos, empresas_1.empresas],
+                include: [departamentos_1.departamentos, empresas_1.empresas, expedientes_1.expedientes],
                 where: { departamentoId, empresaId }
             });
         }

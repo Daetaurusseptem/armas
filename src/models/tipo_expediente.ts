@@ -18,6 +18,10 @@ export const tipo_expedientes = sequelize.define('Tipo_Expedientes', {
         type:DataTypes.STRING(30),
         allowNull:false
     },
+    obligatorio:{
+        type:DataTypes.BOOLEAN,
+        allowNull:false
+    },
     actualizo: {
         type: DataTypes.STRING(8),
         allowNull:false,

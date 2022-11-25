@@ -20,6 +20,10 @@ exports.tipo_expedientes = db_1.default.define('Tipo_Expedientes', {
         type: sequelize_1.DataTypes.STRING(30),
         allowNull: false
     },
+    obligatorio: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        allowNull: false
+    },
     actualizo: {
         type: sequelize_1.DataTypes.STRING(8),
         allowNull: false,

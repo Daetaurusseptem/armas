@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.eliminarExpediente = exports.crearTipoExpedienteArea = exports.getTiposExpedientesArea = exports.getExpedienteEmpleado = void 0;
+exports.getExpedientesObligatorios = exports.eliminarExpediente = exports.crearTipoExpedienteArea = exports.getTiposExpedientesArea = exports.getExpedienteEmpleado = void 0;
 const expedientes_1 = require("./../models/expedientes");
 const empresas_1 = require("../models/empresas");
 const areas_1 = require("../models/areas");
@@ -64,31 +64,6 @@ const getTiposExpedientesArea = (req, resp) => __awaiter(void 0, void 0, void 0,
             ok: true,
             tiposExpediente: tipoExpArea
         });
-        const areasEmpresa = yield areas_1.areas.findAll({ where: { empresaId } });
-        const areasEmpresaArray = areasEmpresa.map((r) => {
-            return r.id;
-        });
-        const tiposExpedientes = yield tipo_expediente_1.tipo_expedientes.findAll();
-        const tipos = tiposExpedientes
-            .reduce((resultados, tipo) => {
-            if (areasEmpresaArray.includes(tipo.areaId)) {
-                if (Array.isArray(resultados)) {
-                    resultados.push(tipo);
-                }
-                else {
-                    console.log(typeof resultados);
-                }
-            }
-            return resultados;
-        });
-        const re = [];
-        re.push(tipos);
-        console.log(re);
-        return resp.status(200).json({
-            ok: true,
-            tiposExpediente: re
-        });
-        console.log('paso de acas');
     }
     catch (error) {
         console.log(error);
@@ -101,7 +76,7 @@ const getTiposExpedientesArea = (req, resp) => __awaiter(void 0, void 0, void 0,
 exports.getTiposExpedientesArea = getTiposExpedientesArea;
 const crearTipoExpedienteArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { tipo, descripcion, actualizo } = req.body;
+        const { tipo, descripcion, actualizo, obligatorio } = req.body;
         const id_tipo = shortid_1.default.generate();
         const { empresaId, areaId } = req.params;
         const empresa = yield empresas_1.empresas.findByPk(empresaId);
@@ -112,7 +87,7 @@ const crearTipoExpedienteArea = (req, resp) => __awaiter(void 0, void 0, void 0,
             });
         }
         const crearTipoExpedienteAreaBD = yield tipo_expediente_1.tipo_expedientes.create({
-            tipo, descripcion, actualizo, areaId, id_tipo
+            tipo, descripcion, actualizo, areaId, id_tipo, obligatorio
         });
         crearTipoExpedienteAreaBD.save();
         return resp.status(200).json({
@@ -158,3 +133,35 @@ const eliminarExpediente = (req, resp) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.eliminarExpediente = eliminarExpediente;
+const getExpedientesObligatorios = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { empresaId, areaId } = req.params;
+        const empresa = yield empresas_1.empresas.findByPk(empresaId);
+        const area = yield areas_1.areas.findByPk(areaId);
+        if (!empresa) {
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Empresa no existe'
+            });
+        }
+        else if (!area) {
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Area no existe'
+            });
+        }
+        const tipoExpArea = yield tipo_expediente_1.tipo_expedientes.findAll({ where: { areaId, obligatorio: true } });
+        return resp.status(200).json({
+            ok: true,
+            tiposExpediente: tipoExpArea
+        });
+    }
+    catch (error) {
+        console.log(error);
+        return resp.status(400).json({
+            ok: false,
+            msg: error
+        });
+    }
+});
+exports.getExpedientesObligatorios = getExpedientesObligatorios;
