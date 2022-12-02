@@ -158,7 +158,7 @@ export const getExpedientesObligatorios = async (req: Request, resp: Response) =
                 ok: false,
                 msg: 'Empresa no existe'
             })
-        } else
+        } else 
             if (!area) {
                 return resp.status(400).json({
                     ok: false,
