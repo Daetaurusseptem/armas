@@ -53,11 +53,14 @@ export const createUser = async(req:Request, resp:Response) =>{
         console.log(nuevoUsuario);
 
         const existeId = await usuarios.findByPk(req.body.id);
-
-        if(existeId){
+        const existeUser = await usuarios.findOne({where:{usuario:req.body.usuario}})
+        console.log(existeUser);
+        
+        if(existeUser?.get('usuario')==req.body.usuario){
+            console.log(existeUser);
             return resp.json({
-                ok:true,
-                body:req.body
+                ok:false,
+                msg:'usuario ya existe'
             })
         }
 
@@ -79,7 +82,7 @@ export const createUser = async(req:Request, resp:Response) =>{
     } catch (error) {
         return resp.status(500).json({
             ok:true,
-            msg:`error inesperado ${error}`
+            msg:`error inesperado contacte a un administrador ${error}`
         })
     }
 }

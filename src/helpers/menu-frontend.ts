@@ -19,8 +19,7 @@ export const getMenuFrontEnd =(role='admin')=>{
                {title:'Usuarios', url:'admin/usuarios'},
                {title:'Empresas', url:'admin/empresas'},
                {title:'Departamentos', url:'admin/departamentos'},
-               {title:'Areas', url:'admin/areas'},
-               {title:'expedientes', url:'admin/expedientes'}
+               {title:'Areas', url:'admin/areas'}
     );
   }
   

@@ -14,7 +14,7 @@ const getMenuFrontEnd = (role = 'admin') => {
         menu[0].title = 'ADMIN TOOLS';
         menu[0].id = 'admin';
         menu[0].icon = 'bi bi-cone-striped';
-        menu[0].submenu.unshift({ title: 'Usuarios', url: 'admin/usuarios' }, { title: 'Empresas', url: 'admin/empresas' }, { title: 'Departamentos', url: 'admin/departamentos' }, { title: 'Areas', url: 'admin/areas' }, { title: 'expedientes', url: 'admin/expedientes' });
+        menu[0].submenu.unshift({ title: 'Usuarios', url: 'admin/usuarios' }, { title: 'Empresas', url: 'admin/empresas' }, { title: 'Departamentos', url: 'admin/departamentos' }, { title: 'Areas', url: 'admin/areas' });
     }
     if (role === 'USER_ROLE') {
         menu[0].title = 'Herramientas Usuario';

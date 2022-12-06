@@ -64,10 +64,13 @@ const createUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
         const nuevoUsuario = req.body;
         console.log(nuevoUsuario);
         const existeId = yield usuarios_1.usuarios.findByPk(req.body.id);
-        if (existeId) {
+        const existeUser = yield usuarios_1.usuarios.findOne({ where: { usuario: req.body.usuario } });
+        console.log(existeUser);
+        if ((existeUser === null || existeUser === void 0 ? void 0 : existeUser.get('usuario')) == req.body.usuario) {
+            console.log(existeUser);
             return resp.json({
-                ok: true,
-                body: req.body
+                ok: false,
+                msg: 'usuario ya existe'
             });
         }
         //password encrypt
@@ -85,7 +88,7 @@ const createUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     catch (error) {
         return resp.status(500).json({
             ok: true,
-            msg: `error inesperado ${error}`
+            msg: `error inesperado contacte a un administrador ${error}`
         });
     }
 });

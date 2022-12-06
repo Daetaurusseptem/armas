@@ -14,7 +14,7 @@ router.get( '/tipos/todo/:empresaId/:areaId', getTiposExpedientesArea )
 router.get( '/tipos/todo/obligatorio/:empresaId/:areaId', getExpedientesObligatorios ) 
 //*POST - Crear Tipo de Expediente de Area
 router.post('/tipos/todo/crear-tipo/:empresaId/:areaId', crearTipoExpedienteArea )
-//*DELETE
+//*DELETE 
 router.delete('/:idExpediente', eliminarExpediente )
  
 export default router 

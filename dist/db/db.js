@@ -4,8 +4,7 @@ const sequelize_1 = require("sequelize");
 const sequelize = new sequelize_1.Sequelize('prueba', 'jaime', '123', {
     host: 'localhost',
     dialect: 'mssql',
-    port: 49674
-    //port laptop:49674 
-    //port pc:49701
+    port: 49676
+    //port laptop:49674 //port pc:49701
 });
 exports.default = sequelize;

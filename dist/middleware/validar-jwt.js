@@ -1,8 +1,20 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validarADMIN_ROLE = exports.validarJWT = void 0;
+const usuarios_1 = require("../models/usuarios");
 const jwt = require('jsonwebtoken');
-exports.validarJWT = (req, resp, next) => {
+const validarJWT = (req, resp, next) => {
     const token = req.header('x-token');
+    console.log(token);
     if (!token) {
         return resp.status(401).json({
             ok: false,
@@ -21,29 +33,32 @@ exports.validarJWT = (req, resp, next) => {
         });
     }
 };
-// exports.validarAdminRole=async(req,resp,next)=>{
-//     const uid =req.uid;
-//     try {
-//         const usuarioDB = await Usuarios.findById(uid)
-//         if(!usuarioDB){
-//             return resp.status(404).json({
-//                 ok:false,
-//                 msg:'Usuario no existe'
-//             })
-//         }
-//         if(usuarioDB.role !=='ADMIN_ROLE'){
-//             return resp.status(404).json({
-//                 ok:false,
-//                 msg:'Usuario no autorizado'
-//             })
-//         }
-//         next();
-//     } catch (error) {
-//         if(!usuarioDB){
-//             resp.status(500).json({
-//                 ok:false,
-//                 msg:'Hubo un error inesperado'
-//             })
-//         }
-//     }
-// }
+exports.validarJWT = validarJWT;
+const validarADMIN_ROLE = (req, resp, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const uid = req.uid;
+    try {
+        console.log(uid);
+        const usuarioDB = yield usuarios_1.usuarios.findByPk(uid);
+        if (!usuarioDB) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'Usuario no existe'
+            });
+        }
+        if (usuarioDB.get('role') !== 'ADMIN_ROLE') {
+            return resp.status(403).json({
+                ok: false,
+                msg: 'No tiene privilegios para hacer eso'
+            });
+        }
+        next();
+    }
+    catch (error) {
+        console.log(error);
+        resp.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+    }
+});
+exports.validarADMIN_ROLE = validarADMIN_ROLE;
