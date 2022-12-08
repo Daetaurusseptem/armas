@@ -67,6 +67,30 @@ export const removeUsuarioPermisos = async(req:Request, resp:Response) =>{
         })
     }
 }
+export const eliminarArea = async(req:Request, resp:Response)=>{
+    try {
+        const {idArea} = req.params
+        const areaDb = await areas.findByPk(idArea)
+        if(!areaDb){
+            resp.status(404).json({
+                ok:false,
+                msg:'El area no existe'
+            })
+        }
+
+         await      areaDb?.destroy()
+
+         resp.status(200).json({
+            ok:true,
+            msg:'El area ha sido eliminada'
+        })
+    } catch (error) {
+        resp.status(500).json({
+            ok:false,
+            msg:'Hubo un error inesperado, el area que desea eliminar, contiene registros, elimine primero estos registros'
+        })
+    }
+}
 //GET - Obtener Area por id - params: idArea
 export const getArea = async(req:Request, resp:Response) =>{
     const {idArea} = req.params
@@ -142,9 +166,11 @@ export const createArea =async (req:Request, resp:Response) =>{
 }
 //PUT - Actualizar Area
 export const updateArea= async (req:Request, resp:Response) => {
-    const {areaId }= req.params;
+    const {idArea }= req.params;
 
-    const areaExiste = await areas.findByPk(areaId);
+    try {
+        
+    const areaExiste = await areas.findByPk(idArea);
 
     if(!areaExiste){
         return resp.status(400).json({
@@ -152,7 +178,17 @@ export const updateArea= async (req:Request, resp:Response) => {
             msg:'Esta area no existe'
         })
     }
-
-    const updateArea = await areas.update({where:{areaId:areaId}},req.body)
+    console.log(req.body);
+    const updateArea = await areas.update(req.body, {where:{id:idArea}})
+    return resp.status(200).json({
+        ok:true, 
+        msg:'Area actualizada'
+    })
+    } catch (error) {
+        return resp.status(500).json({
+            ok:true, 
+            msg:'Error Inesperado '+error
+        })
+    }
 }
 

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateDepartamento = exports.createDepartamentos = exports.getDepartamento = exports.getDepartamentoEmpresaId = exports.getDepartamentos = void 0;
+exports.updateDepartamento = exports.createDepartamentos = exports.getDepartamento = exports.getDepartamentoEmpresaId = exports.deleteDepartamento = exports.getDepartamentos = void 0;
 const departamentos_1 = require("../models/departamentos");
 //* GET - Todos los departamentos
 const getDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,6 +28,31 @@ const getDepartamentos = (req, resp) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getDepartamentos = getDepartamentos;
+//* GET - Todos los departamentos
+const deleteDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idDepartamento } = req.params;
+        const departamentoDb = yield departamentos_1.departamentos.findByPk(idDepartamento);
+        if (!departamentoDb) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'No se encontró el departamento'
+            });
+        }
+        yield departamentoDb.destroy();
+        return resp.status(200).json({
+            ok: true,
+            msg: 'El departamento ha sido eliminado exitosamente'
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: false,
+            msg: 'Hubo un error inesperado el elemento que desea eliminar contiene registros'
+        });
+    }
+});
+exports.deleteDepartamento = deleteDepartamento;
 //* GET - Departamentos por el Id de la empresa
 const getDepartamentoEmpresaId = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -46,7 +71,7 @@ const getDepartamentoEmpresaId = (req, resp) => __awaiter(void 0, void 0, void 0
         });
     }
     catch (error) {
-        return resp.status(404).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Hubo un error inesperado' + error
         });
@@ -125,7 +150,7 @@ const updateDepartamento = (req, resp) => __awaiter(void 0, void 0, void 0, func
         });
     }
     catch (error) {
-        return resp.status(404).json({
+        return resp.status(500).json({
             ok: false,
             msg: 'Error inesperado' + error
         });

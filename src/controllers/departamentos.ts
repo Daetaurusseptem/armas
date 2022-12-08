@@ -20,6 +20,33 @@ export const getDepartamentos = async(req:Request, resp:Response) =>{
         })
     }
 }
+//* GET - Todos los departamentos
+export const deleteDepartamento = async(req:Request, resp:Response) =>{
+    try {
+        const {idDepartamento} = req.params;
+
+        const departamentoDb  = await departamentos.findByPk(idDepartamento)
+        if(!departamentoDb){
+            return resp.status(404).json({
+                ok:false,
+                msg:'No se encontró el departamento'
+            })
+        }
+         await departamentoDb.destroy();
+         
+        return resp.status(200).json({
+            ok:true,
+            msg:'El departamento ha sido eliminado exitosamente'
+        })
+        
+    } catch (error) {
+        
+        return resp.status(500).json({
+            ok:false,
+            msg:'Hubo un error inesperado el elemento que desea eliminar contiene registros'
+        })
+    }
+}
 //* GET - Departamentos por el Id de la empresa
 export const getDepartamentoEmpresaId = async(req:Request, resp:Response) =>{
     try {
@@ -44,7 +71,7 @@ export const getDepartamentoEmpresaId = async(req:Request, resp:Response) =>{
         
     } catch (error) {
         
-        return resp.status(404).json({
+        return resp.status(500).json({
             ok:false,
             msg:'Hubo un error inesperado'+error
         })
@@ -134,7 +161,7 @@ export const updateDepartamento= async (req:Request, resp:Response) => {
 
         
     } catch (error) {
-        return resp.status(404).json({
+        return resp.status(500).json({
             ok:false,
             msg:'Error inesperado'+error
         })

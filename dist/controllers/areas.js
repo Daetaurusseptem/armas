@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateArea = exports.createArea = exports.getAreaUsers = exports.getArea = exports.removeUsuarioPermisos = exports.getAreasEmpresa = exports.getAreas = void 0;
+exports.updateArea = exports.createArea = exports.getAreaUsers = exports.getArea = exports.eliminarArea = exports.removeUsuarioPermisos = exports.getAreasEmpresa = exports.getAreas = void 0;
 const permisos_1 = require("./../models/permisos");
 const areas_1 = require("../models/areas");
 //GET - Obtener Areas
@@ -71,6 +71,30 @@ const removeUsuarioPermisos = (req, resp) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.removeUsuarioPermisos = removeUsuarioPermisos;
+const eliminarArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idArea } = req.params;
+        const areaDb = yield areas_1.areas.findByPk(idArea);
+        if (!areaDb) {
+            resp.status(404).json({
+                ok: false,
+                msg: 'El area no existe'
+            });
+        }
+        yield (areaDb === null || areaDb === void 0 ? void 0 : areaDb.destroy());
+        resp.status(200).json({
+            ok: true,
+            msg: 'El area ha sido eliminada'
+        });
+    }
+    catch (error) {
+        resp.status(500).json({
+            ok: false,
+            msg: 'Hubo un error inesperado, el area que desea eliminar, contiene registros, elimine primero estos registros'
+        });
+    }
+});
+exports.eliminarArea = eliminarArea;
 //GET - Obtener Area por id - params: idArea
 const getArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { idArea } = req.params;
@@ -139,14 +163,27 @@ const createArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
 exports.createArea = createArea;
 //PUT - Actualizar Area
 const updateArea = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { areaId } = req.params;
-    const areaExiste = yield areas_1.areas.findByPk(areaId);
-    if (!areaExiste) {
-        return resp.status(400).json({
-            ok: false,
-            msg: 'Esta area no existe'
+    const { idArea } = req.params;
+    try {
+        const areaExiste = yield areas_1.areas.findByPk(idArea);
+        if (!areaExiste) {
+            return resp.status(400).json({
+                ok: false,
+                msg: 'Esta area no existe'
+            });
+        }
+        console.log(req.body);
+        const updateArea = yield areas_1.areas.update(req.body, { where: { id: idArea } });
+        return resp.status(200).json({
+            ok: true,
+            msg: 'Area actualizada'
         });
     }
-    const updateArea = yield areas_1.areas.update({ where: { areaId: areaId } }, req.body);
+    catch (error) {
+        return resp.status(500).json({
+            ok: true,
+            msg: 'Error Inesperado ' + error
+        });
+    }
 });
 exports.updateArea = updateArea;

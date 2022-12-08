@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateEmpresa = exports.createEmpresa = exports.getEmpresa = exports.getEmpresas = void 0;
+exports.updateEmpresa = exports.createEmpresa = exports.deleteEmpresa = exports.getEmpresa = exports.getEmpresas = void 0;
 const empresas_1 = require("../models/empresas");
 //GET - Obtener Empresas
 const getEmpresas = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
@@ -44,6 +44,31 @@ const getEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getEmpresa = getEmpresa;
+//DELETE - Eliminar Empresa
+const deleteEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idEmpresa } = req.params;
+        const empresaDb = yield empresas_1.empresas.findByPk(idEmpresa);
+        if (!empresaDb) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'No se encontró la empresa'
+            });
+        }
+        yield empresaDb.destroy();
+        return resp.status(200).json({
+            ok: true,
+            msg: 'La empresa ha sido eliminada exitosamente'
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: false,
+            msg: 'Hubo un error inesperado el elemento que desea eliminar contiene registros, elimínelos antes de proceder'
+        });
+    }
+});
+exports.deleteEmpresa = deleteEmpresa;
 //POST - Crear Empresa
 const createEmpresa = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const nuevoEmpresa = req.body;

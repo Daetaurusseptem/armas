@@ -13,7 +13,7 @@ empleados.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId',al
 //Campo empresaId en tabla empleados
 
 empleados.belongsTo(departamentos, {constraints:true, foreignKey:{name:'departamentoId',allowNull:false}})  
-//!QUITA cada vez que se HAGA EL PRIMER SYNC Y VOLVER A PONER
+//!QUITA cada vez que se HAGA EL PRIMER SYNC Y VOLVER A PONER EL SEGUNDO SYNC
 empleados.hasMany(expedientes)
 
 areas.belongsTo(empresas, {constraints:true, foreignKey:{name:'empresaId', allowNull:false}}) 

@@ -35,6 +35,33 @@ export const getEmpresa = async(req:Request, resp:Response) =>{
     }
     
 }
+//DELETE - Eliminar Empresa
+export const deleteEmpresa = async(req:Request, resp:Response) =>{
+    try {
+        const {idEmpresa} = req.params;
+
+        const empresaDb  = await empresas.findByPk(idEmpresa)
+        if(!empresaDb){
+            return resp.status(404).json({
+                ok:false,
+                msg:'No se encontró la empresa'
+            })
+        }
+         await empresaDb.destroy();
+         
+        return resp.status(200).json({
+            ok:true,
+            msg:'La empresa ha sido eliminada exitosamente'
+        })
+        
+    } catch (error) {
+        
+        return resp.status(500).json({
+            ok:false,
+            msg:'Hubo un error inesperado el elemento que desea eliminar contiene registros, elimínelos antes de proceder'
+        })
+    }
+}
 //POST - Crear Empresa
 export const createEmpresa = async(req:Request, resp:Response)=>{
     
