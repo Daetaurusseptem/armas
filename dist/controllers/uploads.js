@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.subirArchivo = void 0;
+exports.subirImg = exports.subirArchivo = void 0;
 const shortid_1 = __importDefault(require("shortid"));
 const fs_1 = __importDefault(require("fs"));
 const empresas_1 = require("../models/empresas");
 const expedientes_1 = require("../models/expedientes");
 const empleados_1 = require("../models/empleados");
+const actualizar_archivo_1 = require("../helpers/actualizar-archivo");
 const subirArchivo = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { empresaId, areaId, empleadoId, departamentoId } = req.params;
@@ -99,6 +100,58 @@ const subirArchivo = (req, resp) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.subirArchivo = subirArchivo;
+const subirImg = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('subir imagen');
+    const { empresaId, empNum, empleadoId } = req.params;
+    // Validar que exista un archivo
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return resp.status(400).json({
+            ok: false,
+            msg: 'No hay ninguna imagen'
+        });
+    }
+    // Procesar la imagen...
+    const file = req.files.imagen;
+    const nombreCortado = file.name.split('.'); // wolverine.1.3.jpg
+    const extensionArchivo = nombreCortado[nombreCortado.length - 1];
+    // Validar extension
+    const extensionesValidas = ['png', 'jpg', 'jpeg', 'gif'];
+    if (!extensionesValidas.includes(extensionArchivo)) {
+        return resp.status(400).json({
+            ok: false,
+            msg: 'No es una extensión permitida'
+        });
+    }
+    // Generar el nombre del archivo
+    const nombreArchivo = `${nombreCortado[0]}.${extensionArchivo}`;
+    const empresaDb = yield empresas_1.empresas.findByPk(empresaId);
+    if (!empresaDb) {
+        return resp.status(404).json({
+            ok: false,
+            msg: 'Empresa no existe'
+        });
+    }
+    // Path para guardar la imagen
+    const path = `C:/expedientes/fotos/${empresaId}/${empNum}/${nombreArchivo}`;
+    // Mover la imagen
+    file.mv(path, (err) => {
+        if (err) {
+            console.log(err);
+            return resp.status(500).json({
+                ok: false,
+                msg: 'Error al mover la imagen'
+            });
+        }
+        // Actualizar base de datos
+        (0, actualizar_archivo_1.actualizarImagen)(empleadoId, empresaId, empNum, nombreArchivo);
+        resp.json({
+            ok: true,
+            msg: 'Archivo subido',
+            nombreArchivo
+        });
+    });
+});
+exports.subirImg = subirImg;
 exports.getArchivo = (req, resp) => {
     const { pathImg } = req.params;
     //img por defecto

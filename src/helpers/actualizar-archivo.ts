@@ -1,13 +1,11 @@
 import { expedientes } from './../models/expedientes';
 import { empleados } from './../models/empleados';
+import { usuarios } from '../models/usuarios';
 
-const Usuario = require('../models/Usuarios');
+
 const fs = require('fs');
-const Materias = require('../models/Materias');
-const Eventos = require('../models/Eventos');
 
-
-const borrarArchivo = (path:string) => {
+const borrarImagen = (path:string) => {
     if (fs.existsSync(path)) {
 
         fs.unlinkSync(path);
@@ -15,30 +13,24 @@ const borrarArchivo = (path:string) => {
     }
 }
 
-export const actualizarArchivo = async (expedienteId:string, empresaId:string, areaId:string, empleadoId:string, departamentoId:string, nombrearchivo:string) => {
 
-    
-    let pathViejo ='';
+export const actualizarImagen = async(empleadoId:string,empresaId:string, empNum:string, nombreArchivo:string) => {
+        try {
+          let pathViejo = '';
+  
+          const empleadoDb = await empleados.findByPk(empleadoId);
+          if ( !empleadoDb ) {
+              return false;
+          }
 
-            const expedienteSelected  = await expedientes.findByPk(expedienteId);
-            if ( !expedienteSelected ) {
-                return false;
-            }
-
-            pathViejo = `C:/expedientes/${empresaId}/${areaId}/${departamentoId}/${nombrearchivo}`
-            //Borrar archivo antiguo
-            borrarArchivo(pathViejo);
-
-            await expedienteSelected.update({path : "Doe" }, {
-                where: {
-                  lastName: null
-                }
-              });
-              expedienteSelected.save()
-
-            return true;
-       
-
-
-
+          pathViejo = `C:/expedientes/fotos/${empresaId}/${empNum}/${nombreArchivo}`;
+          borrarImagen( pathViejo );
+          const img= `${empresaId}/${empNum}/${nombreArchivo}`
+          empleadoDb.set('img', img);
+          await empleadoDb.save();
+          return true;
+        } catch (error) {
+          return error
+        }
+         
 }

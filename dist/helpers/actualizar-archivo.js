@@ -9,32 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.actualizarArchivo = void 0;
-const expedientes_1 = require("./../models/expedientes");
-const Usuario = require('../models/Usuarios');
+exports.actualizarImagen = void 0;
+const empleados_1 = require("./../models/empleados");
 const fs = require('fs');
-const Materias = require('../models/Materias');
-const Eventos = require('../models/Eventos');
-const borrarArchivo = (path) => {
+const borrarImagen = (path) => {
     if (fs.existsSync(path)) {
         fs.unlinkSync(path);
     }
 };
-const actualizarArchivo = (expedienteId, empresaId, areaId, empleadoId, departamentoId, nombrearchivo) => __awaiter(void 0, void 0, void 0, function* () {
-    let pathViejo = '';
-    const expedienteSelected = yield expedientes_1.expedientes.findByPk(expedienteId);
-    if (!expedienteSelected) {
-        return false;
-    }
-    pathViejo = `C:/expedientes/${empresaId}/${areaId}/${departamentoId}/${nombrearchivo}`;
-    //Borrar archivo antiguo
-    borrarArchivo(pathViejo);
-    yield expedienteSelected.update({ path: "Doe" }, {
-        where: {
-            lastName: null
+const actualizarImagen = (empleadoId, empresaId, empNum, nombreArchivo) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let pathViejo = '';
+        const empleadoDb = yield empleados_1.empleados.findByPk(empleadoId);
+        if (!empleadoDb) {
+            return false;
         }
-    });
-    expedienteSelected.save();
-    return true;
+        pathViejo = `C:/expedientes/fotos/${empresaId}/${empNum}/${nombreArchivo}`;
+        borrarImagen(pathViejo);
+        const img = `${empresaId}/${empNum}/${nombreArchivo}`;
+        empleadoDb.set('img', img);
+        yield empleadoDb.save();
+        return true;
+    }
+    catch (error) {
+        return error;
+    }
 });
-exports.actualizarArchivo = actualizarArchivo;
+exports.actualizarImagen = actualizarImagen;
