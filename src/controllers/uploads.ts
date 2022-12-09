@@ -70,8 +70,11 @@ export const subirArchivo = async (req: Request, resp: Response) => {
         let path = `C:/expedientes/${empresaId}/${areaId}/${departamentoId}/${empNum}/${nombreArchivo}`;
     
         file.name = nombreArchivo;
-     
+
         file.mv(path, (err) => {
+            console.log('---------------------------');
+            console.log(err);
+            console.log('---------------------------');
             if (err) {
                 console.log(err);
                 return resp.status(500).json({
@@ -113,7 +116,7 @@ export const subirArchivo = async (req: Request, resp: Response) => {
     } catch (error) {
         resp.status(500).json({
             ok:false,
-            msg:`Hubo un error ineperado: ${error}`
+            msg:`Hubo un error inesperado: ${error}`
         })
     }
 
@@ -122,10 +125,19 @@ export const subirArchivo = async (req: Request, resp: Response) => {
 
 
 export const subirImg = async( req:Request, resp: Response ) => {
-    console.log('subir imagen');
+    
+    
+    try {
     const {empresaId, empNum, empleadoId}= req.params
-
-
+    
+    const empleadoDB = await empleados.findByPk(empleadoId)
+        if(!empleadoDB){
+            return resp.status(404).json({
+                ok: false,
+                msg: 'Empleado no existe'
+            });
+        }
+    
     // Validar que exista un archivo
     if (!req.files || Object.keys(req.files).length === 0) {
         return resp.status(400).json({
@@ -133,10 +145,12 @@ export const subirImg = async( req:Request, resp: Response ) => {
             msg: 'No hay ninguna imagen'
         });
     }
-
+    
     // Procesar la imagen...
     const file = req.files.imagen as UploadedFile
 
+
+    
     const nombreCortado = file.name.split('.'); // wolverine.1.3.jpg
     const extensionArchivo = nombreCortado[ nombreCortado.length - 1 ];
     
@@ -150,40 +164,52 @@ export const subirImg = async( req:Request, resp: Response ) => {
     }
 
     // Generar el nombre del archivo
-    const nombreArchivo = `${nombreCortado[0]}.${ extensionArchivo }`;
-
-
+    
+    
     const empresaDb = await empresas.findByPk(empresaId)
-
-
+    
+    
     if(!empresaDb){
         return resp.status(404).json({
             ok:false,
             msg:'Empresa no existe'
         })
     }
+    const nombreArchivo = `${nombreCortado[0]}.${ extensionArchivo }`;
     // Path para guardar la imagen
-    const path = `C:/expedientes/fotos/${empresaId}/${empNum}/${nombreArchivo}`;
-   
+    let path = `C:/expedientes/fotos/${empresaId}/${empNum}/${nombreArchivo}`
+    file.name = nombreArchivo
+
+    console.log(file.name);
+    
+    
     // Mover la imagen
-    file.mv( path , (err) => {
-        if (err){
-            console.log(err)
+    file.mv(path, (a) => {
+        
+        if (a) {
+            
             return resp.status(500).json({
                 ok: false,
                 msg: 'Error al mover la imagen'
             });
         }
-
+        const rutaAnterior =  empleadoDB.getDataValue('img')
         // Actualizar base de datos
-        actualizarImagen( empleadoId,empresaId,empNum,nombreArchivo);
+        actualizarImagen(empleadoId, empresaId, empNum, rutaAnterior, nombreArchivo);
 
-        resp.json({
+        resp.status(200).json({
             ok: true,
             msg: 'Archivo subido',
             nombreArchivo
         });
     });
+    } catch (error) {
+        resp.status(500).json({
+            ok: false,
+            msg: 'Error del servidor'+error
+        });
+    }
+   
 
 }
 

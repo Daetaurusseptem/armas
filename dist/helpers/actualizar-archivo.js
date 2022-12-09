@@ -14,17 +14,18 @@ const empleados_1 = require("./../models/empleados");
 const fs = require('fs');
 const borrarImagen = (path) => {
     if (fs.existsSync(path)) {
+        console.log('se elimino anterior');
         fs.unlinkSync(path);
     }
 };
-const actualizarImagen = (empleadoId, empresaId, empNum, nombreArchivo) => __awaiter(void 0, void 0, void 0, function* () {
+const actualizarImagen = (empleadoId, empresaId, empNum, anterior, nombreArchivo) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let pathViejo = '';
         const empleadoDb = yield empleados_1.empleados.findByPk(empleadoId);
         if (!empleadoDb) {
             return false;
         }
-        pathViejo = `C:/expedientes/fotos/${empresaId}/${empNum}/${nombreArchivo}`;
+        pathViejo = `C:/expedientes/fotos/${anterior}`;
         borrarImagen(pathViejo);
         const img = `${empresaId}/${empNum}/${nombreArchivo}`;
         empleadoDb.set('img', img);

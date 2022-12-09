@@ -6,7 +6,8 @@ import { usuarios } from '../models/usuarios';
 const fs = require('fs');
 
 const borrarImagen = (path:string) => {
-    if (fs.existsSync(path)) {
+  if (fs.existsSync(path)) {
+      console.log('se elimino anterior');
 
         fs.unlinkSync(path);
 
@@ -14,7 +15,7 @@ const borrarImagen = (path:string) => {
 }
 
 
-export const actualizarImagen = async(empleadoId:string,empresaId:string, empNum:string, nombreArchivo:string) => {
+export const actualizarImagen = async(empleadoId:string,empresaId:string, empNum:string, anterior:string, nombreArchivo:string) => {
         try {
           let pathViejo = '';
   
@@ -23,7 +24,7 @@ export const actualizarImagen = async(empleadoId:string,empresaId:string, empNum
               return false;
           }
 
-          pathViejo = `C:/expedientes/fotos/${empresaId}/${empNum}/${nombreArchivo}`;
+          pathViejo = `C:/expedientes/fotos/${anterior}`;
           borrarImagen( pathViejo );
           const img= `${empresaId}/${empNum}/${nombreArchivo}`
           empleadoDb.set('img', img);
