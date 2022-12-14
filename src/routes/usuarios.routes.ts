@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { check } from 'express-validator';
 import { validarCampos } from '../middleware/validarCampos';
 import { validarJWT, validarADMIN_ROLE } from '../middleware/validar-jwt';
-import { createUser, getUser, getUsers, updateUser } from '../controllers/user';
+import { createUser, getUser, getUsers, updateUser, writeOrReadPermissions } from '../controllers/user';
 
 const router = Router();
 
@@ -25,5 +25,7 @@ router.put('/:userId', [
     validarADMIN_ROLE
 ], updateUser);
 
+// usuario permisos en un area
+router.get('/permiso/:areaId/:usuarioId',[validarJWT], writeOrReadPermissions)
 
 export default router  

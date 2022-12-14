@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
+exports.writeOrReadPermissions = exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
 const usuarios_1 = require("../models/usuarios");
 const shortid_1 = __importDefault(require("shortid"));
 const areas_1 = require("../models/areas");
+const permisos_1 = require("../models/permisos");
 const getUsers = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const listaUsuarios = yield usuarios_1.usuarios.findAll({ include: { model: areas_1.areas } });
@@ -118,3 +119,50 @@ const updateUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.updateUser = updateUser;
+const writeOrReadPermissions = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { usuarioId, areaId } = req.params;
+        console.log(areaId);
+        const userDB = yield usuarios_1.usuarios.findByPk(usuarioId);
+        const areaDB = yield areas_1.areas.findByPk(areaId);
+        if (!userDB) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'Usuario No existe'
+            });
+        }
+        if (!areaDB) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'Area No existe'
+            });
+        }
+        const comprobarPermiso = yield permisos_1.permisos.findOne({ where: { areaId, usuarioId } });
+        if (!comprobarPermiso) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'Permisos no disponibles'
+            });
+        }
+        const tipo = comprobarPermiso.get('tipo');
+        if (tipo == 'e') {
+            return resp.status(200).json({
+                ok: true,
+                tipo: 'e'
+            });
+        }
+        else if (tipo == 'l') {
+            return resp.status(200).json({
+                ok: true,
+                tipo: 'l'
+            });
+        }
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: false,
+            msg: `Hubo un error inesperado: ${error}`
+        });
+    }
+});
+exports.writeOrReadPermissions = writeOrReadPermissions;

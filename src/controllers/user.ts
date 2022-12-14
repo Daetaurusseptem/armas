@@ -3,6 +3,8 @@ import { usuarios } from '../models/usuarios';
 import bcrypt from 'bcrypt';
 import shortId from'shortid'
 import { areas } from '../models/areas';
+import { permisos } from '../models/permisos';
+import { where } from 'sequelize';
 export const getUsers = async(req:Request, resp:Response) =>{
     try {
         const listaUsuarios = await usuarios.findAll({include:{model:areas}});
@@ -112,4 +114,60 @@ export const updateUser = async (req:Request, resp:Response) => {
         })
     }
     
+}
+
+export const writeOrReadPermissions = async (req:Request, resp:Response) => {
+
+
+    try {
+        const {usuarioId, areaId} = req.params
+        console.log(areaId);
+
+        const userDB= await usuarios.findByPk(usuarioId)
+        const areaDB= await areas.findByPk(areaId)
+
+        if(!userDB){
+            return resp.status(404).json({
+                ok:false,
+                msg:'Usuario No existe'
+            })
+        }
+        if(!areaDB){
+            return resp.status(404).json({
+                ok:false,
+                msg:'Area No existe'
+            })
+        }
+
+        const comprobarPermiso = await permisos.findOne({where:{areaId, usuarioId}})
+
+        if(!comprobarPermiso){
+            return resp.status(404).json({
+                ok:false,
+                msg:'Permisos no disponibles'
+            })
+        }
+
+        const tipo = comprobarPermiso.get('tipo')
+
+        if(tipo=='e'){
+            return resp.status(200).json({
+                ok:true,
+                tipo:'e'
+            })
+        }else  if(tipo=='l'){
+            return resp.status(200).json({
+                ok:true,
+                tipo:'l'
+            })
+        }
+        
+        
+    } catch (error) {
+        return resp.status(500).json({
+            ok:false,
+            msg:`Hubo un error inesperado: ${error}`
+        })
+    }
+
 }

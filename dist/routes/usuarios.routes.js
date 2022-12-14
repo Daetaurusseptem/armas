@@ -21,4 +21,6 @@ router.put('/:userId', [
     validar_jwt_1.validarJWT,
     validar_jwt_1.validarADMIN_ROLE
 ], user_1.updateUser);
+// usuario permisos en un area
+router.get('/permiso/:areaId/:usuarioId', [validar_jwt_1.validarJWT], user_1.writeOrReadPermissions);
 exports.default = router;
