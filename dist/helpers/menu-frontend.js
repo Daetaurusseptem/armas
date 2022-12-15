@@ -20,7 +20,7 @@ const getMenuFrontEnd = (role = 'admin') => {
         menu[0].title = 'Herramientas Usuario';
         menu[0].id = 'users';
         menu[0].icon = 'bi bi-people-fillS';
-        menu[0].submenu.unshift({ title: 'Empresas', url: 'empresas' }, { title: 'Departamentos', url: 'admin/departamentos' });
+        menu[0].submenu.unshift({ title: 'Empresas', url: 'empresas' });
     }
     if (role === 'alumno') {
         menu[0].title = 'alumno';

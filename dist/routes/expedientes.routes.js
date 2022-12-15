@@ -8,10 +8,16 @@ const router = (0, express_1.Router)();
 router.get('/:empresaId/:areaId/:empleadoId', expedientes_2.getExpedienteEmpleado);
 //*GET - Obtener todos los tipos de expedientes de un area existentes en una empresa
 router.get('/tipos/todo/:empresaId/:areaId', expedientes_2.getTiposExpedientesArea);
+//*GET - Obtener tipo de expediente
+router.get('/tipos/:idTipoExpediente', expedientes_1.getTipoExpediente);
 //*GET - Obtener todos los tipos de expedientes de un area existentes en una empresa que ademas sean obligatorios
 router.get('/tipos/todo/obligatorio/:empresaId/:areaId', expedientes_1.getExpedientesObligatorios);
 //*POST - Crear Tipo de Expediente de Area
 router.post('/tipos/todo/crear-tipo/:empresaId/:areaId', expedientes_2.crearTipoExpedienteArea);
 //*DELETE 
 router.delete('/:idExpediente', expedientes_2.eliminarExpediente);
+//*DELETE 
+router.delete('/tipo/:idTipoExpediente', expedientes_1.deleteTipoExpediente);
+//*PUT Actualizar tipo expediente
+router.put('/tipo/:idTipoExpediente', expedientes_1.updateTipoExpediente);
 exports.default = router;

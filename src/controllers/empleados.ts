@@ -296,5 +296,37 @@ export const darDeBajaAlta = async (req: Request, resp: Response) => {
       msg: "error: " + error,
     });
   }
+
+
 };
+
+
+//*DELETE EMPLEADO
+
+export const deleteEmpleado = async(req:Request, resp:Response) =>{
+  try {
+      const {idEmpleado} = req.params;
+
+      const empleadoDb  = await empleados.findByPk(idEmpleado)
+      if(!empleadoDb){
+          return resp.status(404).json({
+              ok:false,
+              msg:'No se encontró el empleado'
+          })
+      }
+       await empleadoDb.destroy();
+       
+      return resp.status(200).json({
+          ok:true,
+          msg:'El empleado ha sido eliminado exitosamente'
+      })
+      
+  } catch (error) {
+      
+      return resp.status(500).json({
+          ok:false,
+          msg:'Hubo un error inesperado el elemento que desea eliminar contiene registros'
+      })
+  }
+}
 

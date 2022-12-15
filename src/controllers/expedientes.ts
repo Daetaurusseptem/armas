@@ -183,3 +183,91 @@ export const getExpedientesObligatorios = async (req: Request, resp: Response) =
         })
     }
 }
+
+//*DELETE TIPO EXPEDIENTE
+
+export const deleteTipoExpediente = async(req:Request, resp:Response) =>{
+    try {
+        const {idTipoExpediente} = req.params;
+  
+        const tipoExpedienteId  = await tipo_expedientes.findByPk(idTipoExpediente)
+        if(!tipoExpedienteId){
+            return resp.status(404).json({
+                ok:false,
+                msg:'No se encontró el tipo de expedientes'
+            })
+        }
+         await tipoExpedienteId.destroy();
+         
+        return resp.status(200).json({
+            ok:true,
+            msg:'El tipo de expediente ha sido eliminado exitosamente'
+        })
+        
+    } catch (error) {
+        
+        return resp.status(500).json({
+            ok:false,
+            msg:'Hubo un error inesperado el elemento que desea eliminar contiene registros'
+        })
+    }
+  }
+
+//*ACTUALIZAR TIPO EXPEDIENTE
+
+export const updateTipoExpediente= async (req:Request, resp:Response) => {
+    
+    try {
+        const {idTipoExpediente}= req.params;
+
+        const empresaExiste = await tipo_expedientes.findByPk(idTipoExpediente);
+    
+        if(!empresaExiste){
+            return resp.status(400).json({
+                ok:false,
+                msg:'Este tipo de expediente no existe'
+            })
+        }
+    
+        const updateTipoExpediente = await tipo_expedientes.update(req.body,{where:{id_tipo:idTipoExpediente}})    
+
+        return resp.status(200).json({
+            ok:false,
+            msg:'Departamento Actualizado'
+        })
+
+        
+    } catch (error) {
+        return resp.status(500).json({
+            ok:false,
+            msg:'Error inesperado'+error
+        })
+    }
+    
+    
+}
+
+//*GET TIPO EXPEDIENTE
+//*GET - Obtener tipo expediente por Id - params: idTipoExpediente
+export const getTipoExpediente = async (req: Request, resp: Response) => {
+    const { idTipoExpediente } = req.params;
+    try {
+      const tipoExpediente = await tipo_expedientes.findByPk(idTipoExpediente);
+      if (!tipoExpediente) {
+        resp.status(404).json({
+          ok: false,
+          msg: "El tipo expediente no existe"
+        });
+      }
+      return resp.status(200).json({
+        ok: true,
+        tipoExpediente: tipoExpediente,
+      });
+    } catch (error) {
+      return resp.status(500).json({
+        ok: true,
+        msg: `Hubo un error inesperado: ${error}`,
+      });
+    }
+  };
+

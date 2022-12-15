@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.busquedaEmpleadoEDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
+exports.deleteEmpleado = exports.darDeBajaAlta = exports.updateEmpleado = exports.createEmpleado = exports.getEmpleado = exports.getEmpleadoDepartamento = exports.busquedaEmpleadoEDepartamento = exports.getEmpleadosDepartamento = exports.getEmpleadosEmpresa = exports.getEmpleados = void 0;
 const expedientes_1 = require("./../models/expedientes");
 const empleados_1 = require("../models/empleados");
 const empresas_1 = require("../models/empresas");
@@ -278,3 +278,28 @@ const darDeBajaAlta = (req, resp) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.darDeBajaAlta = darDeBajaAlta;
+//*DELETE EMPLEADO
+const deleteEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idEmpleado } = req.params;
+        const empleadoDb = yield empleados_1.empleados.findByPk(idEmpleado);
+        if (!empleadoDb) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'No se encontró el empleado'
+            });
+        }
+        yield empleadoDb.destroy();
+        return resp.status(200).json({
+            ok: true,
+            msg: 'El empleado ha sido eliminado exitosamente'
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: false,
+            msg: 'Hubo un error inesperado el elemento que desea eliminar contiene registros'
+        });
+    }
+});
+exports.deleteEmpleado = deleteEmpleado;
