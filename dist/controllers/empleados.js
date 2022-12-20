@@ -281,8 +281,8 @@ exports.darDeBajaAlta = darDeBajaAlta;
 //*DELETE EMPLEADO
 const deleteEmpleado = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { idEmpleado } = req.params;
-        const empleadoDb = yield empleados_1.empleados.findByPk(idEmpleado);
+        const { empleadoId } = req.params;
+        const empleadoDb = yield empleados_1.empleados.findByPk(empleadoId);
         if (!empleadoDb) {
             return resp.status(404).json({
                 ok: false,

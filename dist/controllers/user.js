@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeOrReadPermissions = exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
+exports.writeOrReadPermissions = exports.deleteUser = exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
 const usuarios_1 = require("../models/usuarios");
 const shortid_1 = __importDefault(require("shortid"));
 const areas_1 = require("../models/areas");
@@ -119,6 +119,30 @@ const updateUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.updateUser = updateUser;
+const deleteUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idUsuario } = req.params;
+        const usuarioDb = yield usuarios_1.usuarios.findByPk(idUsuario);
+        if (!usuarioDb) {
+            return resp.status(404).json({
+                ok: false,
+                msg: 'No se encontró el tipo de expedientes'
+            });
+        }
+        yield usuarioDb.destroy();
+        return resp.status(200).json({
+            ok: true,
+            msg: 'El usuario ha sido eliminado exitosamente'
+        });
+    }
+    catch (error) {
+        return resp.status(500).json({
+            ok: false,
+            msg: 'Hubo un error inesperado el usuario que desea eliminar contiene registros'
+        });
+    }
+});
+exports.deleteUser = deleteUser;
 const writeOrReadPermissions = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { usuarioId, areaId } = req.params;

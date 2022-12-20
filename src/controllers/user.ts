@@ -115,6 +115,32 @@ export const updateUser = async (req:Request, resp:Response) => {
     }
     
 }
+export const deleteUser = async(req:Request, resp:Response) =>{
+    try {
+        const {idUsuario} = req.params;
+  
+        const usuarioDb  = await usuarios.findByPk(idUsuario)
+        if(!usuarioDb){
+            return resp.status(404).json({
+                ok:false,
+                msg:'No se encontró el tipo de expedientes'
+            })
+        }
+         await usuarioDb.destroy();
+         
+        return resp.status(200).json({
+            ok:true,
+            msg:'El usuario ha sido eliminado exitosamente'
+        })
+        
+    } catch (error) {
+        
+        return resp.status(500).json({
+            ok:false,
+            msg:'Hubo un error inesperado el usuario que desea eliminar contiene registros'
+        })
+    }
+  }
 
 export const writeOrReadPermissions = async (req:Request, resp:Response) => {
 

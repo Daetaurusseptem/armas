@@ -305,9 +305,9 @@ export const darDeBajaAlta = async (req: Request, resp: Response) => {
 
 export const deleteEmpleado = async(req:Request, resp:Response) =>{
   try {
-      const {idEmpleado} = req.params;
+      const {empleadoId} = req.params;
 
-      const empleadoDb  = await empleados.findByPk(idEmpleado)
+      const empleadoDb  = await empleados.findByPk(empleadoId)
       if(!empleadoDb){
           return resp.status(404).json({
               ok:false,

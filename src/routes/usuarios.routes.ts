@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { check } from 'express-validator';
 import { validarCampos } from '../middleware/validarCampos';
 import { validarJWT, validarADMIN_ROLE } from '../middleware/validar-jwt';
-import { createUser, getUser, getUsers, updateUser, writeOrReadPermissions } from '../controllers/user';
+import { createUser, deleteUser, getUser, getUsers, updateUser, writeOrReadPermissions } from '../controllers/user';
 
 const router = Router();
 
@@ -24,6 +24,10 @@ router.put('/:userId', [
     validarJWT,
     validarADMIN_ROLE
 ], updateUser);
+router.delete('/:userId', [
+    validarJWT,
+    validarADMIN_ROLE
+], deleteUser);
 
 // usuario permisos en un area
 router.get('/permiso/:areaId/:usuarioId',[validarJWT], writeOrReadPermissions)
